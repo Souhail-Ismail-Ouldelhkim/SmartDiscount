@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+	  <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+	  <PublishAot Condition="'$(EnableAotPublishing)' == 'true'">true</PublishAot>
+    <UserSecretsId>dotnet-SmartDiscount.OrderProcessor-84a939e9-0daa-4212-8079-d7aa5dada42d</UserSecretsId>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Aspire.Npgsql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\SmartDiscount.EventBusRabbitMQ\SmartDiscount.EventBusRabbitMQ.csproj" />
+	  <ProjectReference Include="..\SmartDiscount.ServiceDefaults\SmartDiscount.ServiceDefaults.csproj" />
+	</ItemGroup>
+	
+</Project>

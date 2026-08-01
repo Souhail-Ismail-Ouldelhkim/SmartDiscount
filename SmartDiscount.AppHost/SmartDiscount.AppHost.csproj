@@ -1,0 +1,34 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.2.0">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<UserSecretsId>0ca36651-ddf4-4ac5-bca2-a8d621edfd78</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Aspire.Hosting.AppHost" />
+		<PackageReference Include="Aspire.Hosting.RabbitMQ" />
+		<PackageReference Include="Aspire.Hosting.Redis" />
+		<PackageReference Include="Aspire.Hosting.PostgreSQL" />
+		<PackageReference Include="Aspire.Hosting.Azure.CognitiveServices" />
+		<PackageReference Include="Aspire.Hosting.Yarp" />
+		<PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SmartDiscount.Basket.API\SmartDiscount.Basket.API.csproj" />
+		<ProjectReference Include="..\SmartDiscount.Catalog.API\SmartDiscount.Catalog.API.csproj" />
+		<ProjectReference Include="..\SmartDiscount.Identity.API\SmartDiscount.Identity.API.csproj" />
+		<ProjectReference Include="..\SmartDiscount.Ordering.API\SmartDiscount.Ordering.API.csproj" />
+		<ProjectReference Include="..\SmartDiscount.OrderProcessor\SmartDiscount.OrderProcessor.csproj" />
+		<ProjectReference Include="..\SmartDiscount.PaymentProcessor\SmartDiscount.PaymentProcessor.csproj" />
+		<ProjectReference Include="..\SmartDiscount.WebAppComponents\SmartDiscount.WebAppComponents.csproj" />
+		<ProjectReference Include="..\SmartDiscount.WebApp\SmartDiscount.WebApp.csproj" />
+		<ProjectReference Include="..\SmartDiscount.WebhookClient\SmartDiscount.WebhookClient.csproj" />
+		<ProjectReference Include="..\SmartDiscount.Webhooks.API\SmartDiscount.Webhooks.API.csproj" />
+	</ItemGroup>
+
+</Project>

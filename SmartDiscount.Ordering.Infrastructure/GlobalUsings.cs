@@ -1,0 +1,12 @@
+﻿global using System.Data;
+global using MediatR;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Design;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.EntityFrameworkCore.Storage;
+global using SmartDiscount.Ordering.Domain.AggregatesModel.BuyerAggregate;
+global using SmartDiscount.Ordering.Domain.AggregatesModel.OrderAggregate;
+global using SmartDiscount.Ordering.Domain.Exceptions;
+global using SmartDiscount.Ordering.Domain.SeedWork;
+global using SmartDiscount.Ordering.Infrastructure.EntityConfigurations;
+global using SmartDiscount.Ordering.Infrastructure.Idempotency;

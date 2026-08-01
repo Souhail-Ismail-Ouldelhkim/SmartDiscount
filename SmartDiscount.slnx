@@ -1,0 +1,36 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+    <File Path="NuGet.config" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Hosting/">
+    <Project Path="SmartDiscount.AppHost/SmartDiscount.AppHost.csproj" />
+    <Project Path="SmartDiscount.ServiceDefaults/SmartDiscount.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="SmartDiscount.EventBus/SmartDiscount.EventBus.csproj" />
+    <Project Path="SmartDiscount.EventBusRabbitMQ/SmartDiscount.EventBusRabbitMQ.csproj" />
+    <Project Path="SmartDiscount.IntegrationEventLogEF/SmartDiscount.IntegrationEventLogEF.csproj" />
+  </Folder>
+  <Folder Name="/src/Ordering/">
+    <Project Path="SmartDiscount.Ordering.API/SmartDiscount.Ordering.API.csproj" />
+    <Project Path="SmartDiscount.Ordering.Domain/SmartDiscount.Ordering.Domain.csproj" />
+    <Project Path="SmartDiscount.Ordering.Infrastructure/SmartDiscount.Ordering.Infrastructure.csproj" />
+    <Project Path="SmartDiscount.OrderProcessor/SmartDiscount.OrderProcessor.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/">
+    <Project Path="SmartDiscount.Basket.API/SmartDiscount.Basket.API.csproj" />
+    <Project Path="SmartDiscount.Catalog.API/SmartDiscount.Catalog.API.csproj" />
+    <Project Path="SmartDiscount.Identity.API/SmartDiscount.Identity.API.csproj" />
+    <Project Path="SmartDiscount.PaymentProcessor/SmartDiscount.PaymentProcessor.csproj" />
+  </Folder>
+  <Folder Name="/src/Webhooks/">
+    <Project Path="SmartDiscount.WebhookClient/SmartDiscount.WebhookClient.csproj" />
+    <Project Path="SmartDiscount.Webhooks.API/SmartDiscount.Webhooks.API.csproj" />
+  </Folder>
+  <Folder Name="/src/Website/">
+    <Project Path="SmartDiscount.WebApp/SmartDiscount.WebApp.csproj" />
+    <Project Path="SmartDiscount.WebAppComponents/SmartDiscount.WebAppComponents.csproj" />
+  </Folder>
+</Solution>

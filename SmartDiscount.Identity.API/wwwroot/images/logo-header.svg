@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 130" width="560" height="130">
+  <rect width="560" height="130" fill="none"/>
+  <g transform="translate(20,18)">
+      <g>
+        <path d="M50 6 L76 32 Q80 36 80 42 L80 84 Q80 90 74 90 L26 90 Q20 90 20 84 L20 42 Q20 36 24 32 L50 6 Z"
+              fill="#D4A63A"/>
+        <circle cx="50" cy="30" r="6.5" fill="#FFFFFF"/>
+        <!-- symbole % -->
+        <circle cx="38" cy="54" r="6" fill="none" stroke="#6B1F2A" stroke-width="4"/>
+        <circle cx="62" cy="74" r="6" fill="none" stroke="#6B1F2A" stroke-width="4"/>
+        <line x1="66" y1="50" x2="34" y2="78" stroke="#6B1F2A" stroke-width="4" stroke-linecap="round"/>
+      </g></g>
+  <text x="120" y="70" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900"
+        font-size="52" letter-spacing="-1" fill="#1A1A1A">Smart<tspan fill="#B98D28">Discount</tspan></text>
+  <text x="122" y="98" font-family="Arial,Helvetica,sans-serif" font-weight="700"
+        font-size="15" letter-spacing="6" fill="#1B2A4A">PREMIUM&#160;PRINTS&#160;&#183;&#160;UP&#160;TO&#160;40%&#160;OFF</text>
+</svg>

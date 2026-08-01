@@ -1,0 +1,11 @@
+﻿global using System.ComponentModel.DataAnnotations;
+global using System.Security.Claims;
+global using System.Text.Json;
+global using Grpc.Core;
+global using Microsoft.AspNetCore.Authorization;
+global using SmartDiscount.Basket.API.Extensions;
+global using SmartDiscount.Basket.API.Grpc;
+global using SmartDiscount.EventBus.Abstractions;
+global using SmartDiscount.EventBus.Events;
+global using SmartDiscount.ServiceDefaults;
+global using StackExchange.Redis;

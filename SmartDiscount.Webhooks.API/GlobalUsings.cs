@@ -1,0 +1,12 @@
+﻿global using System.ComponentModel.DataAnnotations;
+global using System.Text;
+global using System.Text.Json;
+global using Microsoft.EntityFrameworkCore;
+global using SmartDiscount.EventBus.Abstractions;
+global using SmartDiscount.EventBus.Events;
+global using SmartDiscount.ServiceDefaults;
+global using SmartDiscount.Webhooks.API.Infrastructure;
+global using SmartDiscount.Webhooks.API.IntegrationEvents;
+global using SmartDiscount.Webhooks.API.Model;
+global using SmartDiscount.Webhooks.API.Services;
+global using SmartDiscount.Webhooks.API;
