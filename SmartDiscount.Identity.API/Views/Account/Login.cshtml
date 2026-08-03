@@ -1,47 +1,77 @@
 ﻿@model LoginViewModel
 
-<div class="login-page">
-    <div class="container">
-        <div class="row top-buffer">
+<link rel="stylesheet" href="~/css/login.css" />
 
-            @if (Model.EnableLocalLogin)
-            {
-                <div class="col"></div>
-                <div class="col-sm-6">
-                    <form asp-route="Login">
-                        <input type="hidden" asp-for="ReturnUrl" />
-                        <div class="login-container">
-                            <h2>Login</h2>
-                            <partial name="_ValidationSummary" />
-                            <div class="form-group">
-                                <label asp-for="Username"></label>
-                                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Password"></label>
-                                <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
-                            </div>
-                            @if (Model.AllowRememberLogin)
-                            {
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" asp-for="RememberLogin">
-                                        <label class="form-check-label" asp-for="RememberLogin">
-                                            Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                            }
+<div class="sd-login">
+    @if (Model.EnableLocalLogin)
+    {
+        <form asp-route="Login" method="post" class="sd-card">
+            <input type="hidden" asp-for="ReturnUrl" />
 
-                            <div>
-                                <p>The default users are alice/bob, password: Pass123$</p>
-                            </div>
-                            <button class="btn btn-primary" name="button" value="login">Login</button>
-                        </div>
-                    </form>
+            <div class="sd-logo"><span class="sd-tag">%</span> Smart<span>Discount</span></div>
+            <div class="sd-title">Login</div>
+
+            <partial name="_ValidationSummary" />
+
+            <div class="sd-field">
+                <label asp-for="Username">Username</label>
+                <input class="sd-input" placeholder="Username" asp-for="Username" autofocus>
+            </div>
+
+            <div class="sd-field">
+                <label asp-for="Password">Password</label>
+                <div class="sd-pass">
+                    <input type="password" id="sd-pwd" class="sd-input" placeholder="Password" asp-for="Password" autocomplete="off">
+                    <button type="button" class="sd-eye" onclick="sdTogglePwd()" aria-label="Show password">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
                 </div>
-                <div class="col"></div>
-            }
-        </div>
-    </div>
+            </div>
+
+            <div class="sd-row">
+                @if (Model.AllowRememberLogin)
+                {
+                    <label class="sd-check">
+                        <input type="checkbox" asp-for="RememberLogin">
+                        Remember me
+                    </label>
+                }
+                else
+                {
+                    <span></span>
+                }
+                <a class="sd-link" asp-controller="Account" asp-action="ForgotPassword">Reset password?</a>
+            </div>
+
+            <button class="sd-btn" name="button" value="login">Login</button>
+
+            <div class="sd-divider">or continue with</div>
+
+            <div class="sd-social">
+                <a class="sd-social-btn" asp-controller="External" asp-action="Challenge"
+                   asp-route-scheme="Google" asp-route-returnUrl="@Model.ReturnUrl">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#EA4335"><path d="M22 12c0-.6 0-1.2-.1-1.8H12v3.6h5.6c-.2 1.3-1 2.4-2 3.1v2.6h3.3c1.9-1.8 3-4.4 3-7.5z" /><path d="M12 22c2.7 0 5-1 6.6-2.5l-3.3-2.6c-.9.6-2 1-3.3 1-2.5 0-4.7-1.7-5.5-4H3.1v2.6C4.7 19.7 8.1 22 12 22z" fill="#34A853" /><path d="M6.5 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.5H3.1C2.4 8.9 2 10.4 2 12s.4 3.1 1.1 4.5l3.4-2.6z" fill="#FBBC05" /><path d="M12 6.1c1.5 0 2.8.5 3.8 1.5l2.9-2.9C16.9 2.1 14.7 1 12 1 8.1 1 4.7 3.3 3.1 6.5l3.4 2.6c.8-2.3 3-4 5.5-4z" fill="#EA4335" /></svg>
+                    Gmail
+                </a>
+                <a class="sd-social-btn" href="#">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#1a2b4a"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></svg>
+                    Phone number
+                </a>
+            </div>
+
+            <div class="sd-footer">
+                <span>Don't have an account?</span>
+                <a class="sd-link" asp-controller="Account" asp-action="Register">Create account</a>
+            </div>
+        </form>
+    }
 </div>
+
+<script>
+    function sdTogglePwd() {
+        var p = document.getElementById('sd-pwd');
+        p.type = p.type === 'password' ? 'text' : 'password';
+    }
+</script>

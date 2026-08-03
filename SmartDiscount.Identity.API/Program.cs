@@ -8,9 +8,6 @@ builder.Services.AddControllersWithViews();
 
 builder.AddNpgsqlDbContext<ApplicationDbContext>("identitydb");
 
-// Apply database migration automatically. Note that this approach is not
-// recommended for production scenarios. Consider generating SQL scripts from
-// migrations instead.
 builder.Services.AddMigration<ApplicationDbContext, UsersSeed>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -42,15 +39,32 @@ builder.Services.AddTransient<IProfileService, ProfileService>();
 builder.Services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
 builder.Services.AddTransient<IRedirectService, RedirectService>();
 
+builder.Services.AddAuthentication()
+    .AddGoogle("Google", options =>
+    {
+        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+        options.ClientId = builder.Configuration["Google:ClientId"];
+        options.ClientSecret = builder.Configuration["Google:ClientSecret"];
+    });
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
 app.UseStaticFiles();
 
-// This cookie policy fixes login issues with Chrome 80+ using HTTP
+// This cookie policy fixes login issues with Chrome using HTTP
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 app.UseRouting();
+app.UseSession();
 app.UseIdentityServer();
 app.UseAuthorization();
 

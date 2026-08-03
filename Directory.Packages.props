@@ -96,5 +96,7 @@
 		<!-- Extra Package -->
 		<PackageVersion Include="Aspire.StackExchange.Redis.OutputCaching" Version="$(AspireVersion)" />
 		<PackageVersion Include="Aspire.Hosting.AppHost" Version="$(AspireVersion)" />
+        <!--  Google  -->
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(DotnetPackagesVersion)" />
 	</ItemGroup>
 </Project>

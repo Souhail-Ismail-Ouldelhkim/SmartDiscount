@@ -1,0 +1,200 @@
+﻿.sd-login {
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+}
+
+.sd-card {
+    width: 100%;
+    max-width: 460px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+.sd-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a2b4a;
+    margin-bottom: 18px;
+}
+
+    .sd-logo .sd-tag {
+        background: #d4a017;
+        color: #fff;
+        border-radius: 6px;
+        padding: 2px 8px;
+        font-size: 18px;
+    }
+
+    .sd-logo span {
+        color: #d4a017;
+    }
+
+.sd-title {
+    color: #111;
+    font-size: 34px;
+    font-weight: 800;
+    margin: 0 0 24px;
+}
+
+.sd-field {
+    margin-bottom: 18px;
+}
+
+    .sd-field label {
+        display: block;
+        color: #1a2b4a;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+.sd-input {
+    width: 100%;
+    height: 50px;
+    padding: 12px 14px;
+    border: 1px solid #d5d9e0;
+    border-radius: 8px;
+    background: #fff;
+    color: #111;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+    .sd-input:focus {
+        outline: none;
+        border-color: #1a2b4a;
+        box-shadow: 0 0 0 3px rgba(26,43,74,0.08);
+    }
+
+/* Password + eye */
+.sd-pass {
+    position: relative;
+}
+
+    .sd-pass .sd-input {
+        padding-right: 46px;
+    }
+
+.sd-eye {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #667;
+    padding: 0;
+}
+
+/* Row: remember (left) + reset (right) */
+.sd-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.sd-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+}
+
+    .sd-check input {
+        width: 18px;
+        height: 18px;
+    }
+
+.sd-link {
+    color: #d4a017;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+    .sd-link:hover {
+        text-decoration: underline;
+        color: #b8890f;
+    }
+
+/* Primary button */
+.sd-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    background: #1a2b4a;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 8px;
+    border-bottom: 3px solid #d4a017;
+}
+
+    .sd-btn:hover {
+        background: #223763;
+    }
+
+/* Divider */
+.sd-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #999;
+    font-size: 14px;
+    margin: 24px 0;
+}
+
+    .sd-divider::before, .sd-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e5e5e5;
+    }
+
+/* Social buttons */
+.sd-social {
+    display: flex;
+    gap: 14px;
+}
+
+.sd-social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid #d5d9e0;
+    border-radius: 8px;
+    background: #fff;
+    color: #1a2b4a;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+    .sd-social-btn:hover {
+        background: #f7f8fa;
+        color: #1a2b4a;
+    }
+
+/* Footer */
+.sd-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #eee;
+    margin-top: 26px;
+    padding-top: 20px;
+    color: #555;
+}

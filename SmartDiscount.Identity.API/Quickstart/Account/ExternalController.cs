@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartDiscount.Identity.API.Models;
 using System.Security.Claims;
+using SmartDiscount.Identity.API.Models.AccountViewModels;
 
 namespace IdentityServerHost.Quickstart.UI;
 
@@ -38,23 +39,15 @@ public class ExternalController : Controller
         _events = events;
         _logger = logger;
     }
-
-    /// <summary>
-    /// initiate roundtrip to external authentication provider
-    /// </summary>
     [HttpGet]
     public IActionResult Challenge(string scheme, string returnUrl)
     {
         if (string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
-
-        // validate returnUrl - either it is a valid OIDC URL or back to a local page
         if (Url.IsLocalUrl(returnUrl) == false && _interaction.IsValidReturnUrl(returnUrl) == false)
         {
-            // user might have clicked on a malicious link - should be logged
             throw new Exception("invalid return URL");
         }
 
-        // start challenge and roundtrip the return URL and scheme 
         var props = new AuthenticationProperties
         {
             RedirectUri = Url.Action(nameof(Callback)),
@@ -69,13 +62,9 @@ public class ExternalController : Controller
 
     }
 
-    /// <summary>
-    /// Post processing of external authentication
-    /// </summary>
     [HttpGet]
     public async Task<IActionResult> Callback()
     {
-        // read external identity from the temporary cookie
         var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
         if (result?.Succeeded != true)
         {
@@ -88,26 +77,40 @@ public class ExternalController : Controller
             _logger.LogDebug("External claims: {@claims}", externalClaims);
         }
 
-        // lookup our user and external provider info
         var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
+
         if (user == null)
         {
-            // this might be where you might initiate a custom workflow for user registration
-            // in this sample we don't show how that would be done, as our sample implementation
-            // simply auto-provisions new external user
-            user = await AutoProvisionUserAsync(provider, providerUserId, claims);
+            var returnUrlNew = result.Properties.Items["returnUrl"] ?? "~/";
+
+            var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value
+                     ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var firstName = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.GivenName)?.Value
+                         ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
+            var lastName = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.FamilyName)?.Value
+                        ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
+
+           
+            HttpContext.Session.SetString("ext_provider", provider);
+            HttpContext.Session.SetString("ext_providerUserId", providerUserId);
+            HttpContext.Session.SetString("ext_email", email ?? "");
+            HttpContext.Session.SetString("ext_returnUrl", returnUrlNew);
+
+        
+            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
+            return RedirectToAction("EmailLogin", "External", new
+            {
+                email = email,
+                firstName = firstName,
+                lastName = lastName,
+                returnUrl = returnUrlNew
+            });
         }
 
-        // this allows us to collect any additional claims or properties
-        // for the specific protocols used and store them in the local auth cookie.
-        // this is typically used to store data needed for signout from those protocols.
         var additionalLocalClaims = new List<Claim>();
         var localSignInProps = new AuthenticationProperties();
         ProcessLoginCallback(result, additionalLocalClaims, localSignInProps);
-
-        // issue authentication cookie for user
-        // we must issue the cookie maually, and can't use the SignInManager because
-        // it doesn't expose an API to issue additional claims from the login workflow
         var principal = await _signInManager.CreateUserPrincipalAsync(user);
         additionalLocalClaims.AddRange(principal.Claims);
         var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? user.Id;
@@ -121,13 +124,10 @@ public class ExternalController : Controller
 
         await HttpContext.SignInAsync(isuser, localSignInProps);
 
-        // delete temporary cookie used during external authentication
         await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
-        // retrieve return URL
         var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
-        // check if external login is in the context of an OIDC request
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, name, true, context?.Client.ClientId));
 
@@ -135,8 +135,6 @@ public class ExternalController : Controller
         {
             if (context.IsNativeClient())
             {
-                // The client is native, so this change in how to
-                // return the response is for better UX for the end user.
                 return this.LoadingPage("Redirect", returnUrl);
             }
         }
@@ -144,37 +142,113 @@ public class ExternalController : Controller
         return Redirect(returnUrl);
     }
 
+    [HttpGet]
+    public IActionResult EmailLogin(string email, string firstName, string lastName, string returnUrl)
+    {
+        var vm = new EmailLoginViewModel
+        {
+            Email = email,
+            Name = firstName,
+            LastName = lastName,
+            ReturnUrl = returnUrl
+        };
+        return View("~/Views/Account/EmailLogin.cshtml", vm);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EmailLogin(EmailLoginViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View("~/Views/Account/EmailLogin.cshtml", model);
+
+        var provider = HttpContext.Session.GetString("ext_provider");
+        var providerUserId = HttpContext.Session.GetString("ext_providerUserId");
+
+        if (string.IsNullOrEmpty(provider) || string.IsNullOrEmpty(providerUserId))
+        {
+            ModelState.AddModelError(string.Empty, "External login session expired. Please try again.");
+            return View("~/Views/Account/EmailLogin.cshtml", model);
+        }
+
+        var user = new ApplicationUser
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = model.UserName,
+            Email = model.Email,
+            EmailConfirmed = true,
+            PhoneNumber = model.PhoneNumber,
+            Name = model.Name,
+            LastName = model.LastName,
+            Street = model.Street,
+            City = model.City,
+            State = model.State,
+            ZipCode = model.ZipCode,
+            Country = model.Country,
+            CardHolderName = model.CardHolderName,
+            CardNumber = model.CardNumber,
+            Expiration = model.Expiration,
+            SecurityNumber = model.SecurityNumber,
+            CardType = model.CardType
+        };
+
+        var createResult = await _userManager.CreateAsync(user);
+        if (!createResult.Succeeded)
+        {
+            foreach (var error in createResult.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return View("~/Views/Account/EmailLogin.cshtml", model);
+        }
+
+        var loginResult = await _userManager.AddLoginAsync(user,
+            new UserLoginInfo(provider, providerUserId, provider));
+        if (!loginResult.Succeeded)
+        {
+            foreach (var error in loginResult.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return View("~/Views/Account/EmailLogin.cshtml", model);
+        }
+
+        var isuser = new IdentityServerUser(user.Id)
+        {
+            DisplayName = user.UserName,
+            IdentityProvider = provider
+        };
+        await HttpContext.SignInAsync(isuser);
+
+        HttpContext.Session.Remove("ext_provider");
+        HttpContext.Session.Remove("ext_providerUserId");
+        HttpContext.Session.Remove("ext_email");
+        HttpContext.Session.Remove("ext_returnUrl");
+
+        var returnUrl = model.ReturnUrl ?? "~/";
+        if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
+            return Redirect(returnUrl);
+
+        return Redirect("~/");
+    }
+
     private async Task<(ApplicationUser user, string provider, string providerUserId, IEnumerable<Claim> claims)>
         FindUserFromExternalProviderAsync(AuthenticateResult result)
     {
         var externalUser = result.Principal;
-
-        // try to determine the unique id of the external user (issued by the provider)
-        // the most common claim type for that are the sub claim and the NameIdentifier
-        // depending on the external provider, some other claim type might be used
         var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
                           externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
                           throw new Exception("Unknown userid");
 
-        // remove the user id claim so we don't include it as an extra claim if/when we provision the user
         var claims = externalUser.Claims.ToList();
         claims.Remove(userIdClaim);
 
         var provider = result.Properties.Items["scheme"];
         var providerUserId = userIdClaim.Value;
 
-        // find external user
         var user = await _userManager.FindByLoginAsync(provider, providerUserId);
 
         return (user, provider, providerUserId, claims);
     }
-
     private async Task<ApplicationUser> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
     {
-        // create a list of claims that we want to transfer into our store
         var filtered = new List<Claim>();
-
-        // user's display name
         var name = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name)?.Value ??
             claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
         if (name != null)
@@ -201,7 +275,6 @@ public class ExternalController : Controller
             }
         }
 
-        // email
         var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ??
            claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
         if (email != null)
@@ -228,19 +301,14 @@ public class ExternalController : Controller
         return user;
     }
 
-    // if the external login is OIDC-based, there are certain things we need to preserve to make logout work
-    // this will be different for WS-Fed, SAML2p or other protocols
     private void ProcessLoginCallback(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
     {
-        // if the external system sent a session id claim, copy it over
-        // so we can use it for single sign-out
         var sid = externalResult.Principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
         if (sid != null)
         {
             localClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
         }
 
-        // if the external provider issued an id_token, we'll keep it for signout
         var idToken = externalResult.Properties.GetTokenValue("id_token");
         if (idToken != null)
         {

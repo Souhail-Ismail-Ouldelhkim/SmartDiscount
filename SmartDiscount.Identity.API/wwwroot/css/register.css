@@ -1,0 +1,241 @@
+﻿.sd-register {
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+}
+
+.sd-card {
+    width: 100%;
+    max-width: 640px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    position: relative;
+}
+
+.sd-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a2b4a;
+}
+
+    .sd-logo .sd-tag {
+        background: #d4a017;
+        color: #fff;
+        border-radius: 6px;
+        padding: 2px 8px;
+    }
+
+    .sd-logo span {
+        color: #d4a017;
+    }
+
+.sd-step-badge {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    color: #d4a017;
+    font-weight: 700;
+}
+
+.sd-title {
+    color: #111;
+    font-size: 34px;
+    font-weight: 800;
+    margin: 8px 0 4px;
+}
+
+.sd-subtitle {
+    color: #888;
+    margin-bottom: 24px;
+}
+
+.sd-progress {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 30px;
+}
+
+.sd-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #1a2b4a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sd-line {
+    flex: 1;
+    height: 3px;
+    background: #e0e0e0;
+    margin: 0 8px;
+}
+
+    .sd-line .sd-fill {
+        height: 100%;
+        background: #d4a017;
+        width: 50%;
+        transition: width .3s;
+    }
+
+.sd-progress.step2 .sd-line .sd-fill {
+    width: 100%;
+}
+
+.sd-plabels {
+    display: flex;
+    justify-content: space-between;
+    color: #1a2b4a;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 28px;
+}
+
+.sd-grid {
+    display: flex;
+    gap: 18px;
+}
+
+    .sd-grid .sd-field {
+        flex: 1;
+    }
+
+.sd-field {
+    margin-bottom: 18px;
+}
+
+    .sd-field label {
+        display: block;
+        color: #1a2b4a;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+.sd-input, .sd-select {
+    width: 100%;
+    height: 50px;
+    padding: 12px 14px;
+    border: 1px solid #d5d9e0;
+    border-radius: 8px;
+    background: #fff;
+    color: #111;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+    .sd-input:focus, .sd-select:focus {
+        outline: none;
+        border-color: #1a2b4a;
+        box-shadow: 0 0 0 3px rgba(26,43,74,0.08);
+    }
+
+.sd-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    background: #1a2b4a;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 8px;
+    border-bottom: 3px solid #d4a017;
+    margin-top: 8px;
+}
+
+    .sd-btn:hover {
+        background: #223763;
+    }
+
+.sd-back {
+    background: none;
+    border: none;
+    color: #d4a017;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 16px;
+    width: 100%;
+}
+
+.sd-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #eee;
+    margin-top: 26px;
+    padding-top: 20px;
+    color: #555;
+}
+
+.sd-link {
+    color: #d4a017;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+    .sd-link:hover {
+        text-decoration: underline;
+    }
+
+.sd-cardtype-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.sd-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+    .sd-modal-overlay.open {
+        display: flex;
+    }
+
+.sd-modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    width: 320px;
+}
+
+    .sd-modal h3 {
+        margin: 0 0 16px;
+        color: #1a2b4a;
+    }
+
+.sd-modal-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+    .sd-modal-option:hover {
+        background: #f7f8fa;
+        border-color: #1a2b4a;
+    }
+#sd-step2 {
+    display: none;
+}

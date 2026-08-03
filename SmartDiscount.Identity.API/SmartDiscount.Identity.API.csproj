@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <UserSecretsId>326f9e9a-208d-45ba-8d21-415d6c10c307</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -17,6 +18,7 @@
 		</PackageReference>
 		<PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
 		<PackageReference Include="Microsoft.Web.LibraryManager.Build" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -24,6 +26,7 @@
 		<None Include="Views\Account\LoggedOut.cshtml" />
 		<None Include="Views\Account\Login.cshtml" />
 		<None Include="Views\Account\Logout.cshtml" />
+        <None Include="Views\Account\Register.cshtml" />
 		<None Include="Views\Consent\Index.cshtml" />
 		<None Include="Views\Device\Success.cshtml" />
 		<None Include="Views\Device\UserCodeCapture.cshtml" />

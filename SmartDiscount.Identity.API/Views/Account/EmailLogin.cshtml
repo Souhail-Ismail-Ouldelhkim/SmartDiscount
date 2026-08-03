@@ -1,0 +1,127 @@
+﻿@model SmartDiscount.Identity.API.Models.AccountViewModels.EmailLoginViewModel
+
+<link rel="stylesheet" href="~/css/emaillogin.css" />
+
+<div class="sd-register">
+    <form asp-controller="External" asp-action="EmailLogin" method="post" class="sd-card">
+        <input type="hidden" asp-for="ReturnUrl" />
+        <input type="hidden" asp-for="Email" />
+        <input type="hidden" asp-for="CardType" id="CardType" value="1" />
+
+        <div class="sd-logo"><span class="sd-tag">%</span> Smart<span>Discount</span></div>
+        <span class="sd-step-badge" id="sd-step-badge">Step 1 / 2</span>
+        <div class="sd-title">Complete your account</div>
+        <div class="sd-subtitle">Connected with Google — finish your profile</div>
+
+        <div class="sd-progress" id="sd-progress">
+            <div class="sd-dot">1</div>
+            <div class="sd-line"><div class="sd-fill"></div></div>
+            <div class="sd-dot">2</div>
+        </div>
+        <div class="sd-plabels"><span>Profile</span><span>Payment</span></div>
+
+        <partial name="_ValidationSummary" />
+
+        <!-- ÉTAPE 1 : profil -->
+        <div id="sd-step1">
+            <div class="sd-field">
+                <label>Email (from Google)</label>
+                <input class="sd-input" value="@Model.Email" readonly>
+            </div>
+            <div class="sd-grid">
+                <div class="sd-field">
+                    <label asp-for="Name"></label>
+                    <input class="sd-input" id="Name" placeholder="First name" asp-for="Name" autofocus>
+                </div>
+                <div class="sd-field">
+                    <label asp-for="LastName"></label>
+                    <input class="sd-input" id="LastName" placeholder="Last name" asp-for="LastName">
+                </div>
+            </div>
+            <div class="sd-field">
+                <label asp-for="UserName"></label>
+                <input class="sd-input" id="UserName" placeholder="Choose a username" asp-for="UserName">
+            </div>
+            <div class="sd-field">
+                <label asp-for="PhoneNumber"></label>
+                <input class="sd-input" id="PhoneNumber" placeholder="+41 00 000 00 00" asp-for="PhoneNumber">
+            </div>
+            <div class="sd-field">
+                <label asp-for="Street"></label>
+                <input class="sd-input" id="Street" placeholder="Street and number" asp-for="Street">
+            </div>
+            <div class="sd-grid">
+                <div class="sd-field">
+                    <label asp-for="City"></label>
+                    <input class="sd-input" id="City" placeholder="City" asp-for="City">
+                </div>
+                <div class="sd-field">
+                    <label asp-for="State"></label>
+                    <input class="sd-input" id="State" placeholder="State" asp-for="State">
+                </div>
+                <div class="sd-field">
+                    <label asp-for="ZipCode"></label>
+                    <input class="sd-input" id="ZipCode" placeholder="Zip code" asp-for="ZipCode">
+                </div>
+            </div>
+            <div class="sd-field">
+                <label asp-for="Country"></label>
+                <select class="sd-select" id="Country" asp-for="Country">
+                    <option value="">Select your country</option>
+                    <option value="Switzerland">Switzerland</option>
+                    <option value="France">France</option>
+                    <option value="Tunisia">Tunisia</option>
+                    <option value="Morocco">Morocco</option>
+                    <option value="U.S.">United States</option>
+                </select>
+            </div>
+            <button type="button" class="sd-btn" id="sd-next-btn">Next →</button>
+        </div>
+
+        <!-- ÉTAPE 2 : carte -->
+        <div id="sd-step2">
+            <div class="sd-field">
+                <label asp-for="CardHolderName"></label>
+                <input class="sd-input" placeholder="Name on card" asp-for="CardHolderName">
+            </div>
+            <div class="sd-field">
+                <label asp-for="CardNumber"></label>
+                <input class="sd-input" placeholder="0000 0000 0000 0000" asp-for="CardNumber">
+            </div>
+            <div class="sd-field">
+                <label>Card type</label>
+                <div class="sd-input sd-cardtype-btn" id="sd-cardtype-open">
+                    <span id="sd-cardtype-label">Visa</span>
+                    <span>▼</span>
+                </div>
+            </div>
+            <div class="sd-grid">
+                <div class="sd-field">
+                    <label asp-for="Expiration"></label>
+                    <input class="sd-input" placeholder="MM/YY" asp-for="Expiration">
+                </div>
+                <div class="sd-field">
+                    <label asp-for="SecurityNumber"></label>
+                    <input class="sd-input" placeholder="CVC" asp-for="SecurityNumber">
+                </div>
+            </div>
+            <button type="submit" class="sd-btn">Create account</button>
+            <button type="button" class="sd-back" id="sd-back-btn">← Back to previous step</button>
+        </div>
+    </form>
+</div>
+
+<!-- Dialog CardType -->
+<div class="sd-modal-overlay" id="sd-cardtype-modal">
+    <div class="sd-modal">
+        <h3>Select card type</h3>
+        <div class="sd-modal-option" data-value="1" data-label="Visa">💳 Visa</div>
+        <div class="sd-modal-option" data-value="2" data-label="Mastercard">💳 Mastercard</div>
+        <div class="sd-modal-option" data-value="3" data-label="American Express">💳 American Express</div>
+        <button type="button" class="sd-back" id="sd-cardtype-cancel">Cancel</button>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/emaillogin.js" asp-append-version="true"></script>
+}
