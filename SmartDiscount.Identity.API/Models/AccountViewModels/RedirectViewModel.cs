@@ -1,6 +1,4 @@
-﻿// system
-
-namespace SmartDiscount.Identity.API.Models.AccountViewModels
+﻿namespace SmartDiscount.Identity.API.Models.AccountViewModels
 {
     public class RedirectViewModel
     {

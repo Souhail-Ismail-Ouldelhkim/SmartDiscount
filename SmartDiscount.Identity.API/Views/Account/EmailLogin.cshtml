@@ -21,8 +21,6 @@
         <div class="sd-plabels"><span>Profile</span><span>Payment</span></div>
 
         <partial name="_ValidationSummary" />
-
-        <!-- ÉTAPE 1 : profil -->
         <div id="sd-step1">
             <div class="sd-field">
                 <label>Email (from Google)</label>
@@ -77,8 +75,6 @@
             </div>
             <button type="button" class="sd-btn" id="sd-next-btn">Next →</button>
         </div>
-
-        <!-- ÉTAPE 2 : carte -->
         <div id="sd-step2">
             <div class="sd-field">
                 <label asp-for="CardHolderName"></label>
@@ -110,8 +106,6 @@
         </div>
     </form>
 </div>
-
-<!-- Dialog CardType -->
 <div class="sd-modal-overlay" id="sd-cardtype-modal">
     <div class="sd-modal">
         <h3>Select card type</h3>

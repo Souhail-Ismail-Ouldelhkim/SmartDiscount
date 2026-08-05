@@ -22,7 +22,7 @@
                 <label asp-for="Password">Password</label>
                 <div class="sd-pass">
                     <input type="password" id="sd-pwd" class="sd-input" placeholder="Password" asp-for="Password" autocomplete="off">
-                    <button type="button" class="sd-eye" onclick="sdTogglePwd()" aria-label="Show password">
+                    <button type="button" class="sd-eye" id="sd-eye-toggle" aria-label="Show password">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
                         </svg>
@@ -42,7 +42,7 @@
                 {
                     <span></span>
                 }
-                <a class="sd-link" asp-controller="Account" asp-action="ForgotPassword">Reset password?</a>
+                <a class="sd-link" asp-controller="Password" asp-action="ForgotPassword" asp-route-returnUrl="@Model.ReturnUrl">Reset password?</a>
             </div>
 
             <button class="sd-btn" name="button" value="login">Login</button>
@@ -69,9 +69,6 @@
     }
 </div>
 
-<script>
-    function sdTogglePwd() {
-        var p = document.getElementById('sd-pwd');
-        p.type = p.type === 'password' ? 'text' : 'password';
-    }
-</script>
+@section scripts {
+    <script src="~/js/emaillogin.js" asp-append-version="true"></script>
+}
