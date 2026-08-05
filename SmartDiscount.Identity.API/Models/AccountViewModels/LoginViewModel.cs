@@ -1,7 +1,4 @@
-﻿// system 
-
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SmartDiscount.Identity.API.Models.AccountViewModels
 {
