@@ -1,4 +1,4 @@
-﻿using SmartDiscount.AppHost;
+using SmartDiscount.AppHost;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -63,6 +63,13 @@ var webHooksApi = builder.AddProject<Projects.SmartDiscount_Webhooks_API>("webho
     .WithReference(rabbitMq).WaitFor(rabbitMq)
     .WithReference(webhooksDb)
     .WithEnvironment("Identity__Url", identityEndpoint);
+
+var notificationApi = builder.AddProject<Projects.SmartDiscount_Notification_API>("notification-api")
+    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(identityApi)
+    .WithReference(orderingApi);
+
+    
 
 // Reverse proxies
 

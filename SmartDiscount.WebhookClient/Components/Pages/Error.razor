@@ -1,65 +1,36 @@
-﻿@page "/add-webhook"
-@using Microsoft.Extensions.Options
-@inject IOptions<WebhookClientOptions> options
-@inject NavigationManager Nav
-@inject WebhooksClient WebhooksClient
+﻿@page "/Error"
+@using System.Diagnostics
 
-<h2>Register a new webhook</h2>
+<PageTitle>Error</PageTitle>
 
-<p>This page registers the "OrderPaid" Webhook by sending a POST to the WebHooks API. Once the Webhook is set, you will be able to see new paid orders from the <a href="">home</a> page.</p>
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
 
-<form @onsubmit="RegisterAsync">
-    <p>
-        Token:
-        <input type="text" @bind="@token" placeholder="Token" />
-    </p>
-    <button class="action" type="submit">Register</button>
-</form>
-
-@if (!string.IsNullOrEmpty(message))
+@if (ShowRequestId)
 {
-    <p class="error-message">@message</p>
+    <p>
+        <strong>Request ID:</strong> <code>@RequestId</code>
+    </p>
 }
 
+<h3>Development Mode</h3>
+<p>
+    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
+</p>
+<p>
+    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
+    It can result in displaying sensitive information from exceptions to end users.
+    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
+    and restarting the app.
+</p>
+
 @code {
-    string? token;
-    string? message;
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
 
-    protected override void OnInitialized()
-    {
-        token = options.Value.Token;
-    }
+    private string? RequestId { get; set; }
+    private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-    private async Task RegisterAsync()
-    {
-        if (string.IsNullOrEmpty(token))
-        {
-            return;
-        }
-
-        message = null;
-        var baseUrl = !string.IsNullOrEmpty(options.Value.SelfUrl)
-            ? options.Value.SelfUrl
-            : Nav.BaseUri;
-        var granturl = $"{baseUrl}check";
-        var url = $"{baseUrl}webhook-received";
-
-        var payload = new WebhookSubscriptionRequest
-        {
-            Event = "OrderPaid",
-            GrantUrl = granturl,
-            Url = url,
-            Token = token
-        };
-
-        var response = await WebhooksClient.AddWebHookAsync(payload);
-        if (response.IsSuccessStatusCode)
-        {
-            Nav.NavigateTo("");
-        }
-        else
-        {
-            message = $"Registation was rejected with status {(int)response.StatusCode} {response.ReasonPhrase}";
-        }
-    }
+    protected override void OnInitialized() =>
+        RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
 }

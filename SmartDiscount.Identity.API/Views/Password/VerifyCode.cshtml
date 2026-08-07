@@ -1,0 +1,39 @@
+﻿@model SmartDiscount.Identity.API.Models.PasswordViewModels.VerifyCodeViewModel
+
+<link rel="stylesheet" href="~/css/reset.css" />
+
+<div class="sd-reset">
+    <form asp-controller="Password" asp-action="VerifyCode" method="post" class="sd-card">
+        <input type="hidden" asp-for="Email" />
+        <input type="hidden" asp-for="Code" id="sd-code-hidden" />
+
+        <div class="sd-logo"><span class="sd-tag">%</span> Smart<span>Discount</span></div>
+
+        <div class="sd-icon-circle">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1a2b4a" stroke-width="2">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-10 5L2 7" />
+            </svg>
+        </div>
+
+        <div class="sd-title">Verify your email</div>
+        <div class="sd-subtitle">We sent a 4-digit code to<br><strong>@Model.Email</strong></div>
+
+        <partial name="_ValidationSummary" />
+
+        <div class="sd-code-boxes">
+            <input type="text" class="sd-code-box" maxlength="1" inputmode="numeric" data-index="0" autofocus>
+            <input type="text" class="sd-code-box" maxlength="1" inputmode="numeric" data-index="1">
+            <input type="text" class="sd-code-box" maxlength="1" inputmode="numeric" data-index="2">
+            <input type="text" class="sd-code-box" maxlength="1" inputmode="numeric" data-index="3">
+        </div>
+
+        <div class="sd-hint">Enter the code to continue and set a new password.</div>
+
+        <button class="sd-btn" type="submit">Verify code</button>
+    </form>
+</div>
+
+@section scripts {
+    <script src="~/js/reset.js" asp-append-version="true"></script>
+}

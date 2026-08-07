@@ -40,3 +40,14 @@
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var toggle = document.getElementById('sd-eye-toggle');
+    var pwd = document.getElementById('sd-pwd');
+
+    if (toggle && pwd) {
+        toggle.addEventListener('click', function () {
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+        });
+    }
+});

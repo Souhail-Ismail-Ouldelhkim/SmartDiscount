@@ -174,6 +174,20 @@ namespace SmartDiscount.Identity.API.Configuration
                 },
                 new Client
                 {
+                    ClientId = "notification",
+                    ClientName = "Notification Service",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,   
+                    ClientSecrets =
+                    {
+                      new Secret("notificationsecret".Sha256())
+                    },
+                    AllowedScopes =
+                    {
+                        "orders"   
+                     }
+                   },
+                new Client
+                {
                     ClientId = "webhooksswaggerui",
                     ClientName = "WebHooks Service Swagger UI",
                     AllowedGrantTypes = GrantTypes.Implicit,
