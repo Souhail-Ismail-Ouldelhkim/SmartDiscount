@@ -6,7 +6,6 @@ builder.Services.AddProblemDetails();
 
 var withApiVersioning = builder.Services.AddApiVersioning(options =>
 {
-    // Include "api-supported-versions" and "api-deprecated-versions" headers in all responses
     options.ReportApiVersions = true;
 });
 
@@ -20,6 +19,24 @@ var orders = app.NewVersionedApi("Orders");
 
 orders.MapOrdersApiV1()
       .RequireAuthorization();
+
+// Endpoint INTERNE pour le Notification (non protégé, communication inter-services)
+// obligé car Notification écoute un évenement et
+// ce dernier nécessite un token donc c'est obliger de le mettre sans token
+app.MapGet("/api/internal/orders/{orderId:int}",
+    async (int orderId, IOrderQueries queries) =>
+    {
+        try
+        {
+            var order = await queries.GetOrderAsync(orderId);
+            return Results.Ok(order);
+        }
+        catch
+        {
+            return Results.NotFound();
+        }
+    })
+    .AllowAnonymous();
 
 app.UseDefaultOpenApi();
 app.Run();

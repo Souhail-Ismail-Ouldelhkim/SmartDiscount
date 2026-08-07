@@ -22,6 +22,7 @@
 		<ProjectReference Include="..\SmartDiscount.Basket.API\SmartDiscount.Basket.API.csproj" />
 		<ProjectReference Include="..\SmartDiscount.Catalog.API\SmartDiscount.Catalog.API.csproj" />
 		<ProjectReference Include="..\SmartDiscount.Identity.API\SmartDiscount.Identity.API.csproj" />
+		<ProjectReference Include="..\SmartDiscount.Notification.API\SmartDiscount.Notification.API.csproj" />
 		<ProjectReference Include="..\SmartDiscount.Ordering.API\SmartDiscount.Ordering.API.csproj" />
 		<ProjectReference Include="..\SmartDiscount.OrderProcessor\SmartDiscount.OrderProcessor.csproj" />
 		<ProjectReference Include="..\SmartDiscount.PaymentProcessor\SmartDiscount.PaymentProcessor.csproj" />

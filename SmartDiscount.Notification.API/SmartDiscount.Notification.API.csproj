@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>5aa1a7c7-af2d-4404-8dc4-5b51f4fa63b0</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartDiscount.EventBusRabbitMQ\SmartDiscount.EventBusRabbitMQ.csproj" />
+    <ProjectReference Include="..\SmartDiscount.EventBus\SmartDiscount.EventBus.csproj" />
+    <ProjectReference Include="..\SmartDiscount.ServiceDefaults\SmartDiscount.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>
