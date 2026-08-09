@@ -2,7 +2,6 @@
 
 using SmartDiscount.Ordering.Domain.AggregatesModel.OrderAggregate;
 
-// Regular CommandHandler
 
 public class CreateOrderCommandHandler
     : IRequestHandler<CreateOrderCommand, bool>
@@ -13,7 +12,6 @@ public class CreateOrderCommandHandler
     private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
     private readonly ILogger<CreateOrderCommandHandler> _logger;
 
-    // Using DI to inject infrastructure persistence Repositories
     public CreateOrderCommandHandler(IMediator mediator,
         IOrderingIntegrationEventService orderingIntegrationEventService,
         IOrderRepository orderRepository,
@@ -29,16 +27,13 @@ public class CreateOrderCommandHandler
 
     public async Task<bool> Handle(CreateOrderCommand message, CancellationToken cancellationToken)
     {
-        // Add Integration event to clean the basket
         var orderStartedIntegrationEvent = new OrderStartedIntegrationEvent(message.UserId);
         await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStartedIntegrationEvent);
 
-        // Add/Update the Buyer AggregateRoot
-        // DDD patterns comment: Add child entities and value-objects through the Order Aggregate-Root
-        // methods and constructor so validations, invariants and business logic 
-        // make sure that consistency is preserved across the whole aggregate
         var address = new Address(message.Street, message.City, message.State, message.Country, message.ZipCode);
-        var order = new Order(message.UserId, message.UserName, address, message.CardTypeId, message.CardNumber, message.CardSecurityNumber, message.CardHolderName, message.CardExpiration);
+
+        var order = new Order(message.UserId, message.UserName, address, message.CardTypeId, message.CardNumber, message.CardSecurityNumber, message.CardHolderName, message.CardExpiration,
+    discountAmount: message.DiscountAmount, promoCode: message.PromoCode);
 
         foreach (var item in message.OrderItems)
         {
@@ -53,8 +48,6 @@ public class CreateOrderCommandHandler
     }
 }
 
-
-// Use for Idempotency in Command process
 public class CreateOrderIdentifiedCommandHandler : IdentifiedCommandHandler<CreateOrderCommand, bool>
 {
     public CreateOrderIdentifiedCommandHandler(
@@ -67,6 +60,6 @@ public class CreateOrderIdentifiedCommandHandler : IdentifiedCommandHandler<Crea
 
     protected override bool CreateResultForDuplicateRequest()
     {
-        return true; // Ignore duplicate requests for creating order.
+        return true; 
     }
 }

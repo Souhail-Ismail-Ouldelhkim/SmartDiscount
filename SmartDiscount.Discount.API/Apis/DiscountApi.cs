@@ -42,6 +42,5 @@ public static class DiscountApi
         return Results.Ok(new ValidateResponse(true, discount, newTotal, "Code appliqué"));
     }
 }
-
 public record ValidateRequest(string Code, decimal OrderTotal);
 public record ValidateResponse(bool Valid, decimal DiscountAmount, decimal NewTotal, string Message);

@@ -16,9 +16,6 @@ internal enum OpenAITarget
 
 internal static class Extensions
 {
-    /// <summary>
-    /// Adds a hook to set the ASPNETCORE_FORWARDEDHEADERS_ENABLED environment variable to true for all projects in the application.
-    /// </summary>
     public static IDistributedApplicationBuilder AddForwardedHeaders(this IDistributedApplicationBuilder builder)
     {
         builder.Services.TryAddEventingSubscriber<AddForwardHeadersSubscriber>();
@@ -46,9 +43,6 @@ internal static class Extensions
         }
     }
 
-    /// <summary>
-    /// Configures SmartDiscount projects to use OpenAI for text embedding and chat.
-    /// </summary>
     public static IDistributedApplicationBuilder AddOpenAI(this IDistributedApplicationBuilder builder,
         IResourceBuilder<ProjectResource> catalogApi,
         IResourceBuilder<ProjectResource> webApp,
@@ -64,7 +58,7 @@ internal static class Extensions
 
         if (openAITarget != OpenAITarget.AzureOpenAI)
         {
-#pragma warning disable ASPIREINTERACTION001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable ASPIREINTERACTION001 
             IResourceBuilder<ParameterResource>? endpoint = null;
             if (openAITarget != OpenAITarget.OpenAI)
             {
@@ -148,7 +142,7 @@ internal static class Extensions
                 .WithProperties(d =>
                 {
                     d.DeploymentName = textEmbeddingModelName;
-                    d.SkuCapacity = 20; // 20k tokens per minute are needed to seed the initial embeddings
+                    d.SkuCapacity = 20; 
                 });
 
             catalogApi.WithReference(textEmbedding);
@@ -157,10 +151,6 @@ internal static class Extensions
 
         return builder;
     }
-
-    /// <summary>
-    /// Configures SmartDiscount projects to use Ollama for text embedding and chat.
-    /// </summary>
     public static IDistributedApplicationBuilder AddOllama(this IDistributedApplicationBuilder builder,
         IResourceBuilder<ProjectResource> catalogApi,
         IResourceBuilder<ProjectResource> webApp)

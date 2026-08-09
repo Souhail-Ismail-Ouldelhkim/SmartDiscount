@@ -24,6 +24,6 @@ public record ValidateRequest(string Code, decimal OrderTotal);
 
 public record DiscountResult(
     bool Valid,
-    decimal DiscountAmount,
+    double DiscountAmount,
     decimal NewTotal,
     string Message);

@@ -22,6 +22,8 @@
                 State = order.Address.State,
                 Street = order.Address.Street,
                 Zipcode = order.Address.ZipCode,
+                DiscountAmount = order.DiscountAmount,
+                PromoCode = order.PromoCode,
                 Status = order.OrderStatus.ToString(),
                 Total = order.GetTotal(),
                 OrderItems = order.OrderItems.Select(oi => new Orderitem

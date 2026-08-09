@@ -131,7 +131,7 @@
 
     private string promoMessage = "";
     private bool promoValid = false;
-    private decimal discountAmount = 0;
+    private double discountAmount = 0;
     private decimal newTotal = 0;
 
     protected override async Task OnInitializedAsync()
@@ -145,24 +145,20 @@
     private async Task ApplyPromoAsync()
     {
         basketItems = await Basket.GetBasketItemsAsync();
-
         if (string.IsNullOrWhiteSpace(PromoCodeValue))
         {
             promoMessage = "Please enter a code";
             promoValid = false;
             return;
         }
-
         var total = TotalPrice ?? 0;
         var result = await Discount.ValidateCodeAsync(PromoCodeValue, total);
-
         if (result == null)
         {
             promoMessage = "Error validating the code";
             promoValid = false;
             return;
         }
-
         promoValid = result.Valid;
         promoMessage = result.Message;
 
@@ -170,11 +166,13 @@
         {
             discountAmount = result.DiscountAmount;
             newTotal = result.NewTotal;
+            await Basket.SetPromoCodeAsync(PromoCodeValue, result.DiscountAmount);  
         }
         else
         {
             discountAmount = 0;
             newTotal = 0;
+            await Basket.SetPromoCodeAsync(null, 0);
         }
     }
 

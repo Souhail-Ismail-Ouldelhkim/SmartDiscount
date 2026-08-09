@@ -56,7 +56,7 @@ var orderingApi = builder.AddProject<Projects.SmartDiscount_Ordering_API>("order
 builder.AddProject<Projects.SmartDiscount_OrderProcessor>("order-processor")
     .WithReference(rabbitMq).WaitFor(rabbitMq)
     .WithReference(orderDb)
-    .WaitFor(orderingApi); // wait for the orderingApi to be ready because that contains the EF migrations
+    .WaitFor(orderingApi); 
 
 builder.AddProject<Projects.SmartDiscount_PaymentProcessor>("payment-processor")
     .WithReference(rabbitMq).WaitFor(rabbitMq);
@@ -99,7 +99,7 @@ var webApp = builder.AddProject<Projects.SmartDiscount_WebApp>("webapp", launchP
     .WaitFor(identityApi)
     .WithEnvironment("IdentityUrl", identityEndpoint);
 
-// set to true if you want to use OpenAI
+
 bool useOpenAI = false;
 if (useOpenAI)
 {

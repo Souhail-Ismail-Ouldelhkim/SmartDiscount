@@ -21,6 +21,9 @@
         public string Country { get; init; }
         public List<Orderitem> OrderItems { get; set; }
         public decimal Total { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public string PromoCode { get; set; }
+
     }
 
     public record OrderSummary
@@ -36,5 +39,4 @@
         public int Id { get; init; }
         public string Name { get; init; }
     }
-
 }
