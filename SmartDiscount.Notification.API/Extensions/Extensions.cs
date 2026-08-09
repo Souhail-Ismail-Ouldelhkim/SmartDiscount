@@ -20,6 +20,4 @@ public static class Extensions
             client.BaseAddress = new Uri("https://ordering-api");
         });
     }
-
-
 }

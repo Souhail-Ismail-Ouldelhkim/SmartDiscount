@@ -2,10 +2,12 @@
 @inject NavigationManager Nav
 @inject BasketState Basket
 @inject IProductImageUrlProvider ProductImages
+@inject DiscountService Discount
 @attribute [StreamRendering]
 @attribute [Authorize]
 
 <PageTitle>Shopping Bag | SmartDiscount</PageTitle>
+
 <SectionContent SectionName="page-header-title">Shopping bag</SectionContent>
 
 <div class='cart'>
@@ -43,9 +45,9 @@
                             <input type="hidden" name="_handler" value="update-cart" />
                             <AntiforgeryToken />
                             <input aria-label="product quantity" type="number" name="UpdateQuantityValue" value="@quantity" min="0" />
-                            <button type="submit" 
+                            <button type="submit"
                                     class="button button-secondary"
-                                    name="UpdateQuantityId" 
+                                    name="UpdateQuantityId"
                                     value="@item.ProductId">
                                 Update
                             </button>
@@ -57,7 +59,6 @@
                 </div>
             }
         </div>
-       
 
         <div class="cart-summary">
             <div class="cart-summary-container">
@@ -70,6 +71,39 @@
                     <div>Total</div>
                     <div>$@TotalPrice?.ToString("0.00")</div>
                 </div>
+
+                <div class="promo-section" style="margin: 15px 0; padding: 15px 0; border-top: 1px solid #eee;">
+                    <form method="post" data-enhance>
+                        <input type="hidden" name="_handler" value="apply-promo" />
+                        <AntiforgeryToken />
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Promo code</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input name="PromoCodeValue" value="@PromoCodeValue" placeholder="Enter your code"
+                                   style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+                            <button type="submit" class="button button-secondary">Apply</button>
+                        </div>
+                    </form>
+
+                    @if (!string.IsNullOrEmpty(promoMessage))
+                    {
+                        <p style="margin-top: 8px; color: @(promoValid ? "green" : "red");">@promoMessage</p>
+                    }
+
+                    @if (promoValid && discountAmount > 0)
+                    {
+                        <div style="margin-top: 10px;">
+                            <div style="display: flex; justify-content: space-between; color: green;">
+                                <span>Discount</span>
+                                <span>-$@discountAmount.ToString("0.00")</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em; margin-top: 5px;">
+                                <span>New total</span>
+                                <span>$@newTotal.ToString("0.00")</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+
                 <a href="checkout" class="button button-primary">Check out</a>
                 <a href="" class="cart-summary-link">
                     <img role="presentation" src="icons/arrow-left.svg" />
@@ -81,6 +115,7 @@
 </div>
 
 <form @formname="update-cart" @onsubmit="@UpdateQuantityAsync"></form>
+<form @formname="apply-promo" @onsubmit="@ApplyPromoAsync"></form>
 
 @code {
     private IReadOnlyCollection<BasketItem>? basketItems;
@@ -91,6 +126,14 @@
     [SupplyParameterFromForm]
     public int? UpdateQuantityValue { get; set; }
 
+    [SupplyParameterFromForm]
+    public string? PromoCodeValue { get; set; }
+
+    private string promoMessage = "";
+    private bool promoValid = false;
+    private double discountAmount = 0;
+    private decimal newTotal = 0;
+
     protected override async Task OnInitializedAsync()
     {
         basketItems = await Basket.GetBasketItemsAsync();
@@ -99,8 +142,40 @@
     private decimal? TotalPrice => basketItems?.Sum(i => i.Quantity * i.UnitPrice);
     private decimal? TotalQuantity => basketItems?.Sum(i => i.Quantity);
 
-    // While an update post is in process, we want to show the pending quantity, not the one
-    // that is committed to the cart (otherwise the UI briefly shows the old data)
+    private async Task ApplyPromoAsync()
+    {
+        basketItems = await Basket.GetBasketItemsAsync();
+        if (string.IsNullOrWhiteSpace(PromoCodeValue))
+        {
+            promoMessage = "Please enter a code";
+            promoValid = false;
+            return;
+        }
+        var total = TotalPrice ?? 0;
+        var result = await Discount.ValidateCodeAsync(PromoCodeValue, total);
+        if (result == null)
+        {
+            promoMessage = "Error validating the code";
+            promoValid = false;
+            return;
+        }
+        promoValid = result.Valid;
+        promoMessage = result.Message;
+
+        if (result.Valid)
+        {
+            discountAmount = result.DiscountAmount;
+            newTotal = result.NewTotal;
+            await Basket.SetPromoCodeAsync(PromoCodeValue, result.DiscountAmount);  
+        }
+        else
+        {
+            discountAmount = 0;
+            newTotal = 0;
+            await Basket.SetPromoCodeAsync(null, 0);
+        }
+    }
+
     private int CurrentOrPendingQuantity(int productId, int cartQuantity)
         => UpdateQuantityId.GetValueOrDefault(-1) == productId
         ? UpdateQuantityValue!.Value

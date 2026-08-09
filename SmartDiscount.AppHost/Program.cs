@@ -18,8 +18,9 @@ var catalogDb = postgres.AddDatabase("catalogdb");
 var identityDb = postgres.AddDatabase("identitydb");
 var orderDb = postgres.AddDatabase("orderingdb");
 var webhooksDb = postgres.AddDatabase("webhooksdb");
+var discountDb = postgres.AddDatabase("discountdb");
 
- var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
+var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
 
 // Services
 
@@ -27,6 +28,7 @@ var webhooksDb = postgres.AddDatabase("webhooksdb");
     .WithExternalHttpEndpoints()
     .WithReference(identityDb)
     .WithHttpHealthCheck("/health");
+
 
 
  var identityEndpoint = identityApi.GetEndpoint(launchProfileName);
@@ -54,7 +56,7 @@ var orderingApi = builder.AddProject<Projects.SmartDiscount_Ordering_API>("order
 builder.AddProject<Projects.SmartDiscount_OrderProcessor>("order-processor")
     .WithReference(rabbitMq).WaitFor(rabbitMq)
     .WithReference(orderDb)
-    .WaitFor(orderingApi); // wait for the orderingApi to be ready because that contains the EF migrations
+    .WaitFor(orderingApi); 
 
 builder.AddProject<Projects.SmartDiscount_PaymentProcessor>("payment-processor")
     .WithReference(rabbitMq).WaitFor(rabbitMq);
@@ -69,7 +71,10 @@ var notificationApi = builder.AddProject<Projects.SmartDiscount_Notification_API
     .WithReference(identityApi)
     .WithReference(orderingApi);
 
-    
+var discountApi = builder.AddProject<Projects.SmartDiscount_Discount_API>("discount-api")
+    .WithReference(discountDb)
+    .WaitFor(postgres);
+
 
 // Reverse proxies
 
@@ -88,11 +93,13 @@ var webApp = builder.AddProject<Projects.SmartDiscount_WebApp>("webapp", launchP
     .WithReference(basketApi)
     .WithReference(catalogApi)
     .WithReference(orderingApi)
-    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(discountApi)
+    .WithReference(rabbitMq)
+    .WaitFor(rabbitMq)
     .WaitFor(identityApi)
     .WithEnvironment("IdentityUrl", identityEndpoint);
 
-// set to true if you want to use OpenAI
+
 bool useOpenAI = false;
 if (useOpenAI)
 {

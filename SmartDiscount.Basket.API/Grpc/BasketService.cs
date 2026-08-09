@@ -77,7 +77,11 @@ public class BasketService(
 
     private static CustomerBasketResponse MapToCustomerBasketResponse(CustomerBasket customerBasket)
     {
-        var response = new CustomerBasketResponse();
+        var response = new CustomerBasketResponse
+        {
+            PromoCode = customerBasket.PromoCode ?? "",       
+            DiscountAmount = (double)customerBasket.DiscountAmount   
+        };
 
         foreach (var item in customerBasket.Items)
         {
@@ -95,7 +99,9 @@ public class BasketService(
     {
         var response = new CustomerBasket
         {
-            BuyerId = userId
+            BuyerId = userId,
+            PromoCode = customerBasketRequest.PromoCode,             
+            DiscountAmount = (decimal)customerBasketRequest.DiscountAmount   
         };
 
         foreach (var item in customerBasketRequest.Items)

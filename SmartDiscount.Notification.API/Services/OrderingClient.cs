@@ -5,18 +5,20 @@ namespace SmartDiscount.Notification.API.Services;
 public class OrderInfo
 {
     public int OrderNumber { get; set; }
-    public string? Street { get; set; }
-    public string? City { get; set; }
-    public string? State { get; set; }
-    public string? Country { get; set; }
-    public string? Zipcode { get; set; }
+    public string Street { get; set; }
+    public string City { get; set; }
+    public string State { get; set; }
+    public string Country { get; set; }
+    public string Zipcode { get; set; }
     public double Total { get; set; }
+    public double DiscountAmount { get; set; }   
+    public string PromoCode { get; set; }   
     public List<OrderItemInfo> OrderItems { get; set; } = new();
 }
 
 public class OrderItemInfo
 {
-    public string? ProductName { get; set; }
+    public string ProductName { get; set; }
     public int Units { get; set; }
     public double UnitPrice { get; set; }
 }
@@ -37,7 +39,7 @@ public class OrderingClient
         _logger = logger;
     }
 
-    public async Task<OrderInfo?> GetOrderByIdAsync(int orderId)
+    public async Task<OrderInfo> GetOrderByIdAsync(int orderId)
     {
         try
         {

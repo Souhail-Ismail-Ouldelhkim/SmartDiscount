@@ -18,8 +18,6 @@ public static class Extensions
                .AddEventBusSubscriptions();
 
         builder.Services.AddHttpForwarderWithServiceDiscovery();
-
-        // Application services
         builder.Services.AddScoped<BasketState>();
         builder.Services.AddScoped<LogOutService>();
         builder.Services.AddSingleton<BasketService>();
@@ -27,7 +25,6 @@ public static class Extensions
         builder.Services.AddSingleton<IProductImageUrlProvider, ProductImageUrlProvider>();
         builder.AddAIServices();
 
-        // HTTP and GRPC client registrations
         builder.Services.AddGrpcClient<Basket.BasketClient>(o => o.Address = new("http://basket-api"))
             .AddAuthToken();
 
@@ -38,6 +35,8 @@ public static class Extensions
         builder.Services.AddHttpClient<OrderingService>(o => o.BaseAddress = new("https+http://ordering-api"))
             .AddApiVersion(1.0)
             .AddAuthToken();
+
+        builder.Services.AddHttpClient<DiscountService>(o => o.BaseAddress = new("https+http://discount-api"));
     }
 
     public static void AddEventBusSubscriptions(this IEventBusBuilder eventBus)
@@ -60,8 +59,6 @@ public static class Extensions
         var identityUrl = configuration.GetRequiredValue("IdentityUrl");
         var callBackUrl = configuration.GetRequiredValue("CallBackUrl");
         var sessionCookieLifetime = configuration.GetValue("SessionCookieLifetimeMinutes", 60);
-
-        // Add Authentication services
         services.AddAuthorization();
         services.AddAuthentication(options =>
         {
@@ -86,7 +83,6 @@ public static class Extensions
             options.Scope.Add("basket");
         });
 
-        // Blazor auth services
         services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
         services.AddCascadingAuthenticationState();
     }

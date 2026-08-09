@@ -6,7 +6,7 @@ namespace SmartDiscount.WebApp.Services;
 
 public class BasketService(GrpcBasketClient basketClient)
 {
-    public async Task<IReadOnlyCollection<BasketQuantity>> GetBasketAsync()
+    public async Task<BasketData> GetBasketAsync()
     {
         var result = await basketClient.GetBasketAsync(new());
         return MapToBasket(result);
@@ -17,10 +17,13 @@ public class BasketService(GrpcBasketClient basketClient)
         await basketClient.DeleteBasketAsync(new DeleteBasketRequest());
     }
 
-    public async Task UpdateBasketAsync(IReadOnlyCollection<BasketQuantity> basket)
+    public async Task UpdateBasketAsync(IReadOnlyCollection<BasketQuantity> basket, string? promoCode = null, double discountAmount = 0)
     {
-        var updatePayload = new UpdateBasketRequest();
-
+        var updatePayload = new UpdateBasketRequest
+        {
+            PromoCode = promoCode ?? "",
+            DiscountAmount = discountAmount
+        };
         foreach (var item in basket)
         {
             var updateItem = new GrpcBasketItem
@@ -30,20 +33,19 @@ public class BasketService(GrpcBasketClient basketClient)
             };
             updatePayload.Items.Add(updateItem);
         }
-
         await basketClient.UpdateBasketAsync(updatePayload);
     }
 
-    private static List<BasketQuantity> MapToBasket(CustomerBasketResponse response)
+    private static BasketData MapToBasket(CustomerBasketResponse response)
     {
-        var result = new List<BasketQuantity>();
+        var items = new List<BasketQuantity>();
         foreach (var item in response.Items)
         {
-            result.Add(new BasketQuantity(item.ProductId, item.Quantity));
+            items.Add(new BasketQuantity(item.ProductId, item.Quantity));
         }
-
-        return result;
+        return new BasketData(items, response.PromoCode, response.DiscountAmount);
     }
 }
 
 public record BasketQuantity(int ProductId, int Quantity);
+public record BasketData(List<BasketQuantity> Items, string PromoCode, double DiscountAmount);
