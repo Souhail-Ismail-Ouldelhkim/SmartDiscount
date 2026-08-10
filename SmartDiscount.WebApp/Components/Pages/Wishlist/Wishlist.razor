@@ -1,0 +1,103 @@
+﻿@page "/user/wishlist"
+@using SmartDiscount.WebApp.Services
+@using SmartDiscount.WebAppComponents.Services
+@using SmartDiscount.WebAppComponents.Catalog
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize]
+@attribute [StreamRendering]
+@inject WishlistService WishlistService
+@inject CatalogService CatalogService
+@inject BasketState BasketState
+@inject IProductImageUrlProvider ProductImages
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>My Wishes | SmartDiscount</PageTitle>
+<SectionContent SectionName="page-header-title">My Wishes</SectionContent>
+
+<div class="wishlist">
+    @if (items is null)
+    {
+        <p>Loading...</p>
+    }
+    else if (items.Count == 0)
+    {
+        <p>Your wishlist is empty. <a href="">Continue shopping.</a></p>
+    }
+    else
+    {
+        <div class="wishlist-items">
+            @foreach (var entry in items)
+            {
+                <div class="wishlist-card">
+                    <a href="item/@entry.Product.Id">
+                        <img class="wishlist-image" alt="@entry.Product.Name" src="@ProductImages.GetProductImageUrl(entry.Product)" />
+                    </a>
+                    <div class="wishlist-info">
+                        <a href="item/@entry.Product.Id" class="wishlist-name">@entry.Product.Name</a>
+                        <p class="wishlist-desc">@entry.Product.Description</p>
+                        <span class="wishlist-price">$@entry.Product.Price.ToString("0.00")</span>
+                    </div>
+                    <div class="wishlist-actions">
+                        <form method="post" @formname="@($"remove-{entry.WishlistId}")" @onsubmit="@(() => RemoveAsync(entry.WishlistId))" data-enhance>
+                            <AntiforgeryToken />
+                            <button type="submit" class="btn-remove">Supprimer</button>
+                        </form>
+                        <form method="post" @formname="@($"tocart-{entry.WishlistId}")" @onsubmit="@(() => AddToCartAsync(entry))" data-enhance>
+                            <AntiforgeryToken />
+                            <button type="submit" class="btn-cart">Add to shopping bag</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<WishlistEntry>? items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadWishlistAsync();
+    }
+
+    private async Task LoadWishlistAsync()
+    {
+        var buyerId = await AuthenticationStateProvider.GetBuyerIdAsync();
+        if (buyerId is null)
+        {
+            items = new List<WishlistEntry>();
+            return;
+        }
+
+        var favorites = await WishlistService.GetWishlistAsync(buyerId);
+        if (favorites.Count == 0)
+        {
+            items = new List<WishlistEntry>();
+            return;
+        }
+
+        var productIds = favorites.Select(f => f.ProductId);
+        var catalogItems = (await CatalogService.GetCatalogItems(productIds)).ToDictionary(k => k.Id, v => v);
+
+        items = favorites
+            .Where(f => catalogItems.ContainsKey(f.ProductId))
+            .Select(f => new WishlistEntry(f.Id, catalogItems[f.ProductId]))
+            .ToList();
+    }
+
+    private async Task RemoveAsync(int wishlistId)
+    {
+        await WishlistService.RemoveAsync(wishlistId);
+        await LoadWishlistAsync();
+    }
+
+    private async Task AddToCartAsync(WishlistEntry entry)
+    {
+        await BasketState.AddAsync(entry.Product);
+        await WishlistService.MoveToCartAsync(entry.WishlistId);
+        await LoadWishlistAsync();
+    }
+
+    private record WishlistEntry(int WishlistId, CatalogItem Product);
+}

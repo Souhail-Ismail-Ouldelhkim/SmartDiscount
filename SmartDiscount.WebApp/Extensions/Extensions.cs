@@ -37,6 +37,8 @@ public static class Extensions
             .AddAuthToken();
 
         builder.Services.AddHttpClient<DiscountService>(o => o.BaseAddress = new("https+http://discount-api"));
+
+        builder.Services.AddHttpClient<WishlistService>(o => o.BaseAddress = new("https+http://wishlist-api"));
     }
 
     public static void AddEventBusSubscriptions(this IEventBusBuilder eventBus)

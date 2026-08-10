@@ -31,6 +31,7 @@
 		<ProjectReference Include="..\SmartDiscount.WebApp\SmartDiscount.WebApp.csproj" />
 		<ProjectReference Include="..\SmartDiscount.WebhookClient\SmartDiscount.WebhookClient.csproj" />
 		<ProjectReference Include="..\SmartDiscount.Webhooks.API\SmartDiscount.Webhooks.API.csproj" />
+		<ProjectReference Include="..\SmartDiscount.Wishlist.API\SmartDiscount.Wishlist.API.csproj" />
 	</ItemGroup>
 
 </Project>

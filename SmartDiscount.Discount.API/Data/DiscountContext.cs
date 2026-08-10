@@ -17,7 +17,7 @@ public class DiscountContext : DbContext
         {
             entity.HasKey(p => p.Id);
             entity.Property(p => p.Code).IsRequired().HasMaxLength(50);
-            entity.HasIndex(p => p.Code).IsUnique();   // un code = unique
+            entity.HasIndex(p => p.Code).IsUnique();   
             entity.Property(p => p.Type).HasMaxLength(20);
             entity.Property(p => p.Value).HasColumnType("decimal(18,2)");
         });

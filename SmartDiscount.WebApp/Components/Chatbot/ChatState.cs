@@ -68,11 +68,8 @@ public class ChatState
 
     public async Task AddUserMessageAsync(string userText, Action onMessageAdded)
     {
-        // Store the user's message
         Messages.Add(new ChatMessage(ChatRole.User, userText));
         onMessageAdded();
-
-        // Get and store the AI's response message
         try
         {
             var response = await _chatClient.GetResponseAsync(Messages, _chatOptions);

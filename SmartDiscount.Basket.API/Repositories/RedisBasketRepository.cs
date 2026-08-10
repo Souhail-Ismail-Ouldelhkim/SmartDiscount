@@ -10,11 +10,7 @@ public class RedisBasketRepository(ILogger<RedisBasketRepository> logger, IConne
 {
     private readonly IDatabase _database = redis.GetDatabase();
 
-    // implementation:
-
-    // - /basket/{id} "string" per unique basket
     private static RedisKey BasketKeyPrefix = "/basket/"u8.ToArray();
-    // note on UTF8 here: library limitation (to be fixed) - prefixes are more efficient as blobs
 
     private static RedisKey GetBasketKey(string userId) => BasketKeyPrefix.Append(userId);
 
