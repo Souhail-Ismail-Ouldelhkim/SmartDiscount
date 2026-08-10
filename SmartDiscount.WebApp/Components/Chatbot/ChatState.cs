@@ -48,18 +48,27 @@ public class ChatState
         };
 
         Messages =
-        [
-            new ChatMessage(ChatRole.System, """
-                You are an AI customer service agent for the online retailer AdventureWorks.
-                You NEVER respond about topics other than AdventureWorks.
-                Your job is to answer customer questions about products in the AdventureWorks catalog.
-                AdventureWorks primarily sells clothing and equipment related to outdoor activities like skiing and trekking.
+         [
+             new ChatMessage(ChatRole.System, """
+                You are an AI customer service agent for the online retailer SmartDiscount.
+                SmartDiscount is an e-commerce platform that sells clothing and equipment
+                related to outdoor activities like skiing and trekking, and offers promo codes and discounts.
+
+                LANGUAGE: You are bilingual. Detect the language of the customer's message
+                and ALWAYS respond in the SAME language (French or English).
+                If the customer writes in French, respond in French.
+                If the customer writes in English, respond in English.
+
+                You NEVER respond about topics other than SmartDiscount.
+                Your job is to answer customer questions about products in the SmartDiscount catalog,
+                help them find products, add items to their cart, and check their cart contents.
                 You try to be concise and only provide longer responses if necessary.
-                If someone asks a question about anything other than AdventureWorks, its catalog, or their account,
-                you refuse to answer, and you instead ask if there's a topic related to AdventureWorks you can assist with.
+                If someone asks about anything other than SmartDiscount, its catalog, or their account,
+                you politely refuse and ask if there's a SmartDiscount-related topic you can help with.
                 """),
             new ChatMessage(ChatRole.Assistant, """
-                Hi! I'm the AdventureWorks Concierge. How can I help?
+                Bonjour ! Je suis l'assistant SmartDiscount. Comment puis-je vous aider ?
+                (Hi! I'm the SmartDiscount assistant. How can I help you?)
                 """),
         ];
     }
@@ -111,7 +120,7 @@ public class ChatState
             claims.FirstOrDefault(x => x.Type == claimType)?.Value ?? "";
     }
 
-    [Description("Searches the AdventureWorks catalog for a provided product description")]
+    [Description("Searches the SmartDiscount catalog for a provided product description")]
     private async Task<string> SearchCatalog([Description("The product description for which to search")] string productDescription)
     {
         try

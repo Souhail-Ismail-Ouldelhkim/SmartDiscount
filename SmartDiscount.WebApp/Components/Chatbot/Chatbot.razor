@@ -12,7 +12,7 @@
 @inject IServiceProvider ServiceProvider
 
 <div class="floating-pane">
-    <a href="@Nav.GetUriWithQueryParameter("chat", (string?)null)" class="hide-chatbot" title="Close .NET Concierge"><span>✖</span></a>
+    <p class="message message-assistant"><strong>The chatbot is missing required configuration.</strong> Please set 'useOpenAI = true' in SmartDiscount.AppHost/Program.cs.</p>
 
     <div class="chatbot-chat" @ref="chat">
         @if (chatState is not null)

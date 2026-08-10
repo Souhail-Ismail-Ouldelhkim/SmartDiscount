@@ -106,10 +106,10 @@ var webApp = builder.AddProject<Projects.SmartDiscount_WebApp>("webapp", launchP
     .WithEnvironment("IdentityUrl", identityEndpoint);
 
 
-bool useOpenAI = false;
+bool useOpenAI = true;
 if (useOpenAI)
 {
-   // builder.AddOpenAI(catalogApi, webApp, OpenAITarget.OpenAI); // set to AzureOpenAI if you want to use Azure OpenAI
+  builder.AddOpenAI(catalogApi, webApp, OpenAITarget.OpenAI); // set to AzureOpenAI if you want to use Azure Ope
 }
 
 bool useOllama = false;
