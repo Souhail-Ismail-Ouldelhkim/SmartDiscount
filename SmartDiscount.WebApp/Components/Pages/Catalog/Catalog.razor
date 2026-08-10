@@ -1,6 +1,10 @@
 ﻿@page "/"
+@using SmartDiscount.WebApp.Services
+@using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager Nav
 @inject CatalogService CatalogService
+@inject WishlistService WishlistService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [StreamRendering]
 
 <PageTitle>SmartDiscount</PageTitle>
@@ -20,7 +24,18 @@
             <div class="catalog-items">
                 @foreach (var item in catalogResult.Data)
                 {
-                    <CatalogListItem Item="@item" />
+                    <div class="catalog-item-wrapper">
+                        <CatalogListItem Item="@item" />
+                        @if (isLoggedIn)
+                        {
+                            <form method="post" @formname="@($"wishlist-{item.Id}")" @onsubmit="@(() => AddToWishlistAsync(item.Id))" data-enhance>
+                                <AntiforgeryToken />
+                                <button type="submit" class="catalog-heart" title="Add to wishlist">
+                                    @(favoriteIds.Contains(item.Id) ? "♥" : "♡")
+                                </button>
+                            </form>
+                        }
+                    </div>
                 }
             </div>
 
@@ -46,17 +61,46 @@
     [SupplyParameterFromQuery(Name = "type")]
     public int? ItemTypeId { get; set; }
 
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
     CatalogResult? catalogResult;
+    private bool isLoggedIn;
+    private HashSet<int> favoriteIds = new();
 
     static IEnumerable<int> GetVisiblePageIndexes(CatalogResult result)
         => Enumerable.Range(1, (int)Math.Ceiling(1.0 * result.Count / PageSize));
 
     protected override async Task OnInitializedAsync()
     {
+        isLoggedIn = HttpContext?.User.Identity?.IsAuthenticated == true;
+
         catalogResult = await CatalogService.GetCatalogItems(
             Page.GetValueOrDefault(1) - 1,
             PageSize,
             BrandId,
             ItemTypeId);
+
+        if (isLoggedIn)
+        {
+            var userId = HttpContext?.User.FindFirst("sub")?.Value;
+            if (userId is not null)
+            {
+                var favorites = await WishlistService.GetWishlistAsync(userId);
+                favoriteIds = favorites.Select(f => f.ProductId).ToHashSet();
+            }
+        }
+    }
+
+    private async Task AddToWishlistAsync(int productId)
+    {
+        if (!isLoggedIn) return;
+
+        var userId = HttpContext?.User.FindFirst("sub")?.Value;
+        if (userId is not null)
+        {
+            await WishlistService.AddToWishlistAsync(userId, productId);
+            favoriteIds.Add(productId);
+        }
     }
 }

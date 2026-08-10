@@ -19,6 +19,7 @@ var identityDb = postgres.AddDatabase("identitydb");
 var orderDb = postgres.AddDatabase("orderingdb");
 var webhooksDb = postgres.AddDatabase("webhooksdb");
 var discountDb = postgres.AddDatabase("discountdb");
+var wishlistDb = postgres.AddDatabase("wishlistdb");
 
 var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
 
@@ -75,6 +76,10 @@ var discountApi = builder.AddProject<Projects.SmartDiscount_Discount_API>("disco
     .WithReference(discountDb)
     .WaitFor(postgres);
 
+var wishlistApi = builder.AddProject<Projects.SmartDiscount_Wishlist_API>("wishlist-api")
+    .WithReference(wishlistDb)
+    .WaitFor(postgres);
+
 
 // Reverse proxies
 
@@ -94,6 +99,7 @@ var webApp = builder.AddProject<Projects.SmartDiscount_WebApp>("webapp", launchP
     .WithReference(catalogApi)
     .WithReference(orderingApi)
     .WithReference(discountApi)
+    .WithReference(wishlistApi)
     .WithReference(rabbitMq)
     .WaitFor(rabbitMq)
     .WaitFor(identityApi)

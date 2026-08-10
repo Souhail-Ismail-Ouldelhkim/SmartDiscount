@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;   // ← AJOUTER cette ligne
+﻿using Microsoft.EntityFrameworkCore;  
 using SmartDiscount.Discount.API.Models;
 
 namespace SmartDiscount.Discount.API.Data;

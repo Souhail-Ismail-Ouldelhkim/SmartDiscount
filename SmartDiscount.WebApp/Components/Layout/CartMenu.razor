@@ -24,9 +24,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // The basket contents may change during the lifetime of this component (e.g., when an item is
-        // added during the current request). If this EventCallback is invoked, it will cause this
-        // component to re-render with the updated data.
         basketStateSubscription = Basket.NotifyOnChange(
             EventCallback.Factory.Create(this, UpdateBasketItemsAsync));
 

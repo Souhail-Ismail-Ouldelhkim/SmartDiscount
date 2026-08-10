@@ -9,10 +9,6 @@ public static partial class MessageProcessor
 {
     public static MarkupString AllowImages(string message)
     {
-        // Having to process markdown and deal with HTML encoding isn't ideal. If the language model could return
-        // search results in some defined format like JSON we could simply loop over it in .razor code. This is
-        // fine for now though.
-
         var result = new StringBuilder();
         var prevEnd = 0;
         message = message.Replace("&lt;", "<").Replace("&gt;", ">");

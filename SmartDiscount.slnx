@@ -26,6 +26,7 @@
     <Project Path="SmartDiscount.Identity.API/SmartDiscount.Identity.API.csproj" />
     <Project Path="SmartDiscount.Notification.API/SmartDiscount.Notification.API.csproj" />
     <Project Path="SmartDiscount.PaymentProcessor/SmartDiscount.PaymentProcessor.csproj" />
+    <Project Path="SmartDiscount.Wishlist.API/SmartDiscount.Wishlist.API.csproj" />
   </Folder>
   <Folder Name="/src/Webhooks/">
     <Project Path="SmartDiscount.WebhookClient/SmartDiscount.WebhookClient.csproj" />
