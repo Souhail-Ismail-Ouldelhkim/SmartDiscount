@@ -13,7 +13,7 @@
 	<ItemGroup>
 		<!-- Version together with Aspire -->
 		<PackageVersion Include="Aspire.Hosting.Azure.CognitiveServices" Version="$(AspireVersion)" />
-		<PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="$(AspireVersion)" />
+        <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="$(AspireVersion)" />
 		<PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="$(AspireVersion)" />
 		<PackageVersion Include="Aspire.Hosting.Redis" Version="$(AspireVersion)" />
 		<PackageVersion Include="Aspire.Hosting.Yarp" Version="$(AspireVersion)" />
@@ -98,5 +98,7 @@
 		<PackageVersion Include="Aspire.Hosting.AppHost" Version="$(AspireVersion)" />
         <!--  Google  -->
         <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(DotnetPackagesVersion)" />
+        <!-- For Azure -->
+        <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="$(AspireVersion)" />
 	</ItemGroup>
 </Project>

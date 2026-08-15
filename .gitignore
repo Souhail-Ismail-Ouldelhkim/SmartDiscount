@@ -101,3 +101,9 @@ $RECYCLE.BIN/
 *.pfx
 *.p12
 *.key
+.azure
+## ===== azd - Infrastructure générée (ne pas versionner) =====
+infra/
+SmartDiscount.AppHost/infra/
+next-steps.md
+.azure/

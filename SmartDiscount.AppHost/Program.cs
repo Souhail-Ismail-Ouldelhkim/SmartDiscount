@@ -9,10 +9,15 @@ var rabbitMq = builder.AddRabbitMQ("eventbus")
     .WithLifetime(ContainerLifetime.Persistent)
     .WithManagementPlugin()
     .WithDataVolume();
-var postgres = builder.AddPostgres("postgres-smartDiscount")
-    .WithImage("ankane/pgvector")
-    .WithImageTag("latest")
-    .WithLifetime(ContainerLifetime.Persistent);
+
+var postgres = builder.AddAzurePostgresFlexibleServer("postgres")
+    .WithPasswordAuthentication()
+    .RunAsContainer(container =>
+    {
+        container.WithImage("ankane/pgvector")
+                 .WithImageTag("latest")
+                 .WithLifetime(ContainerLifetime.Persistent);
+    });
 
 var catalogDb = postgres.AddDatabase("catalogdb");
 var identityDb = postgres.AddDatabase("identitydb");

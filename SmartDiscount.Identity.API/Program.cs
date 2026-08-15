@@ -33,7 +33,8 @@ builder.Services.AddIdentityServer(options =>
 .AddInMemoryApiResources(Config.GetApis())
 .AddInMemoryClients(Config.GetClients(builder.Configuration))
 .AddAspNetIdentity<ApplicationUser>()
-.AddDeveloperSigningCredential();
+// .AddDeveloperSigningCredential();
+.AddDeveloperSigningCredential(filename: "/tmp/tempkey.jwk");
 
 builder.Services.AddTransient<IProfileService, ProfileService>();
 builder.Services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
