@@ -5,10 +5,24 @@ var builder = DistributedApplication.CreateBuilder(args);
 builder.AddForwardedHeaders();
 
 var redis = builder.AddRedis("redis");
-var rabbitMq = builder.AddRabbitMQ("eventbus") 
+/*var rabbitMq = builder.AddRabbitMQ("eventbus") 
     .WithLifetime(ContainerLifetime.Persistent)
     .WithManagementPlugin()
     .WithDataVolume();
+*/
+
+var serviceBus = builder.AddAzureServiceBus("eventbus")
+    .RunAsEmulator();
+var topic = serviceBus.AddServiceBusTopic("smartdiscount-event-bus");
+topic.AddServiceBusSubscription("Basket");
+topic.AddServiceBusSubscription("Catalog");
+topic.AddServiceBusSubscription("Notification");
+topic.AddServiceBusSubscription("Ordering");
+topic.AddServiceBusSubscription("OrderProcessor");
+topic.AddServiceBusSubscription("PaymentProcessor");
+topic.AddServiceBusSubscription("Ordering-webapp");
+topic.AddServiceBusSubscription("Webhooks");
+
 
 var postgres = builder.AddAzurePostgresFlexibleServer("postgres")
     .WithPasswordAuthentication()
@@ -41,7 +55,7 @@ var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
 
  var basketApi = builder.AddProject<Projects.SmartDiscount_Basket_API>("basket-api")
     .WithReference(redis)
-    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(serviceBus).WaitFor(serviceBus)
     .WithEnvironment("Identity__Url", identityEndpoint);
 redis.WithParentRelationship(basketApi);
 
@@ -49,31 +63,31 @@ redis.WithParentRelationship(basketApi);
 
 
  var catalogApi = builder.AddProject<Projects.SmartDiscount_Catalog_API>("catalog-api")
-    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(serviceBus).WaitFor(serviceBus)
     .WithReference(catalogDb);
 
 
 var orderingApi = builder.AddProject<Projects.SmartDiscount_Ordering_API>("ordering-api")
-    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(serviceBus).WaitFor(serviceBus)
     .WithReference(orderDb).WaitFor(orderDb)
     .WithHttpHealthCheck("/health")
     .WithEnvironment("Identity__Url", identityEndpoint); 
 
 builder.AddProject<Projects.SmartDiscount_OrderProcessor>("order-processor")
-    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(serviceBus).WaitFor(serviceBus)
     .WithReference(orderDb)
-    .WaitFor(orderingApi); 
+    .WaitFor(orderingApi);
 
 builder.AddProject<Projects.SmartDiscount_PaymentProcessor>("payment-processor")
-    .WithReference(rabbitMq).WaitFor(rabbitMq);
+    .WithReference(serviceBus).WaitFor(serviceBus);
 
 var webHooksApi = builder.AddProject<Projects.SmartDiscount_Webhooks_API>("webhooks-api")
-    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(serviceBus).WaitFor(serviceBus)
     .WithReference(webhooksDb)
     .WithEnvironment("Identity__Url", identityEndpoint);
 
 var notificationApi = builder.AddProject<Projects.SmartDiscount_Notification_API>("notification-api")
-    .WithReference(rabbitMq).WaitFor(rabbitMq)
+    .WithReference(serviceBus).WaitFor(serviceBus)
     .WithReference(identityApi)
     .WithReference(orderingApi);
 
@@ -105,8 +119,8 @@ var webApp = builder.AddProject<Projects.SmartDiscount_WebApp>("webapp", launchP
     .WithReference(orderingApi)
     .WithReference(discountApi)
     .WithReference(wishlistApi)
-    .WithReference(rabbitMq)
-    .WaitFor(rabbitMq)
+    .WithReference(serviceBus)
+    .WaitFor(serviceBus)
     .WaitFor(identityApi)
     .WithEnvironment("IdentityUrl", identityEndpoint);
 

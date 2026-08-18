@@ -13,7 +13,7 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SmartDiscount.EventBusRabbitMQ\SmartDiscount.EventBusRabbitMQ.csproj" />
+      <ProjectReference Include="..\SmartDiscount.EventBusServiceBus\SmartDiscount.EventBusServiceBus.csproj" />
 	  <ProjectReference Include="..\SmartDiscount.IntegrationEventLogEF\SmartDiscount.IntegrationEventLogEF.csproj" />
 	  <ProjectReference Include="..\SmartDiscount.Ordering.Domain\SmartDiscount.Ordering.Domain.csproj" />
 	  <ProjectReference Include="..\SmartDiscount.Ordering.Infrastructure\SmartDiscount.Ordering.Infrastructure.csproj" />

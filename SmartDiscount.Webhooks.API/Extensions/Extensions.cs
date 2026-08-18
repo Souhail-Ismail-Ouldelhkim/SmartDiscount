@@ -6,7 +6,7 @@ internal static class Extensions
     {
         builder.AddDefaultAuthentication();
 
-        builder.AddRabbitMqEventBus("eventbus")
+        builder.AddServiceBusEventBus("eventbus")
                .AddEventBusSubscriptions();
 
         builder.AddNpgsqlDbContext<WebhooksContext>("webhooksdb");

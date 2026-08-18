@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <RootNamespace>SmartDiscount.EventBusServiceBus</RootNamespace>
+        <IsAotCompatible>true</IsAotCompatible>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Azure.Messaging.ServiceBus" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SmartDiscount.EventBus\SmartDiscount.EventBus.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\Shared\ActivityExtensions.cs" Link="ActivityExtensions.cs" />
+    </ItemGroup>
+</Project>

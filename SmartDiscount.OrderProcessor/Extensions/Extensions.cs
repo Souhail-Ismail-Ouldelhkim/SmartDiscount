@@ -7,7 +7,7 @@ namespace SmartDiscount.OrderProcessor.Extensions
     {
         public static void AddApplicationServices(this IHostApplicationBuilder builder)
         {
-            builder.AddRabbitMqEventBus("eventbus")
+            builder.AddServiceBusEventBus("eventbus")
                    .ConfigureJsonOptions(options => options.TypeInfoResolverChain.Add(IntegrationEventContext.Default));
 
             builder.AddNpgsqlDataSource("orderingdb");

@@ -63,6 +63,6 @@ namespace SmartDiscount.Identity.API.Models.AccountViewModels
         [Display(Name = "Card type")]
         public int CardType { get; init; }
 
-        public string ReturnUrl { get; init; }
+        public string? ReturnUrl { get; init; }
     }
 }

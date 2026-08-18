@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using SmartDiscount.Identity.API.Models;
 using SmartDiscount.Identity.API.Models.PasswordViewModels;
-using SmartDiscount.Identity.API.Services;
+
 
 namespace IdentityServerHost.Quickstart.UI;
 
@@ -46,6 +45,7 @@ public class PasswordController : Controller
         var user = await _userManager.FindByEmailAsync(model.Email);
 
         if (user != null && await _userManager.HasPasswordAsync(user))
+         // if ( user != null )
         {
             var code = new Random().Next(1000, 9999).ToString();
             _cache.Set("reset_" + model.Email.ToLower(), code, TimeSpan.FromMinutes(10));

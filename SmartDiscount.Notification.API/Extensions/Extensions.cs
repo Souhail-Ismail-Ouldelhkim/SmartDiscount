@@ -8,7 +8,7 @@ public static class Extensions
 {
     public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {
-        builder.AddRabbitMqEventBus("eventbus")
+        builder.AddServiceBusEventBus("eventbus")
                .AddSubscription<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
 
         builder.Services.AddHttpClient<IdentityClient>(client =>

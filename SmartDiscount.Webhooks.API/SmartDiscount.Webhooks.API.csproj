@@ -23,7 +23,7 @@
 	</ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\SmartDiscount.EventBusRabbitMQ\SmartDiscount.EventBusRabbitMQ.csproj" />
+    <ProjectReference Include="..\SmartDiscount.EventBusServiceBus\SmartDiscount.EventBusServiceBus.csproj" />
     <ProjectReference Include="..\SmartDiscount.IntegrationEventLogEF\SmartDiscount.IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\SmartDiscount.ServiceDefaults\SmartDiscount.ServiceDefaults.csproj" />
   </ItemGroup>

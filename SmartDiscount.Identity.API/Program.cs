@@ -1,4 +1,4 @@
-using SmartDiscount.Identity.API.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,7 @@ builder.Services.AddMigration<ApplicationDbContext, UsersSeed>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.User.RequireUniqueEmail = true;   
+    options.User.RequireUniqueEmail = true;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
@@ -33,8 +33,9 @@ builder.Services.AddIdentityServer(options =>
 .AddInMemoryApiResources(Config.GetApis())
 .AddInMemoryClients(Config.GetClients(builder.Configuration))
 .AddAspNetIdentity<ApplicationUser>()
-// .AddDeveloperSigningCredential();
-.AddDeveloperSigningCredential(filename: "/tmp/tempkey.jwk");
+.AddDeveloperSigningCredential(filename: Path.Combine(Path.GetTempPath(), "tempkey.jwk"))
+.AddRedirectUriValidator<FlexibleRedirectUriValidator>();
+
 
 builder.Services.AddTransient<IProfileService, ProfileService>();
 builder.Services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
@@ -59,6 +60,17 @@ builder.Services.AddSession(options =>
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
+
+//proxy Azure ---
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeadersOptions);
+//
+
 
 app.MapDefaultEndpoints();
 

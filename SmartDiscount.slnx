@@ -11,6 +11,7 @@
   <Folder Name="/src/Infrastructure/">
     <Project Path="SmartDiscount.EventBus/SmartDiscount.EventBus.csproj" />
     <Project Path="SmartDiscount.EventBusRabbitMQ/SmartDiscount.EventBusRabbitMQ.csproj" />
+    <Project Path="SmartDiscount.EventBusServiceBus/SmartDiscount.EventBusServiceBus.csproj" Id="97349252-3706-4b8b-b26b-84f67538b5ac" />
     <Project Path="SmartDiscount.IntegrationEventLogEF/SmartDiscount.IntegrationEventLogEF.csproj" />
   </Folder>
   <Folder Name="/src/Ordering/">
