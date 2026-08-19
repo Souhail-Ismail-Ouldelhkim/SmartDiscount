@@ -8,3 +8,13 @@ de ce code, en tout ou en partie, est strictement interdite sans autorisation
 écrite préalable de l'auteur.
 
 CE LOGICIEL EST FOURNI "EN L'ÉTAT", SANS GARANTIE D'AUCUNE SORTE.
+
+
+
+## For testing on Production try with this account : 
+
+salmaMounirRabat / JmMUtVcg:)2BH(*~V2mtPKY8    
+
+SamiArraki / )2BHJmM)2BH( UtVcg:
+
+Or sign in with your Google account
