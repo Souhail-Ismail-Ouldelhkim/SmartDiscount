@@ -18,3 +18,5 @@ salmaMounirRabat / JmMUtVcg:)2BH(*~V2mtPKY8
 SamiArraki / )2BHJmM)2BH( UtVcg:
 
 Or sign in with your Google account
+
+Base URL for testing : https://webapp.salmonhill-36e3040d.northeurope.azurecontainerapps.io/
