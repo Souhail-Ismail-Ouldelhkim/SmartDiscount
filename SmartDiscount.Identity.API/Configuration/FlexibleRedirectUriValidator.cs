@@ -16,7 +16,7 @@ public class FlexibleRedirectUriValidator : StrictRedirectUriValidator
         if (client.ClientId == "webapp")
         {
             var isAzureRevision = Regex.IsMatch(requestedUri,
-                @"^https://webapp--\d+\.calmbay-[a-z0-9]+\.[a-z0-9]+\.azurecontainerapps\.io/signin-oidc$",
+                @"^https://webapp--\d+\.salmonhill-[a-z0-9]+\.[a-z0-9]+\.azurecontainerapps\.io/signin-oidc$",
                 RegexOptions.IgnoreCase);
 
             if (isAzureRevision)
@@ -38,7 +38,7 @@ public class FlexibleRedirectUriValidator : StrictRedirectUriValidator
         if (client.ClientId == "webapp")
         {
             var isAzureRevisionLogout = Regex.IsMatch(requestedUri,
-                @"^https://webapp--\d+\.calmbay-[a-z0-9]+\.[a-z0-9]+\.azurecontainerapps\.io/signout-callback-oidc$",
+                @"^https://webapp--\d+\.salmonhill-[a-z0-9]+\.[a-z0-9]+\.azurecontainerapps\.io/signout-callback-oidc$",
                 RegexOptions.IgnoreCase);
 
             if (isAzureRevisionLogout)
@@ -46,7 +46,6 @@ public class FlexibleRedirectUriValidator : StrictRedirectUriValidator
                 return true;
             }
         }
-
         return false;
     }
 }
