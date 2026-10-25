@@ -50,7 +50,6 @@ var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
     .WithHttpHealthCheck("/health");
 
 
-
  var identityEndpoint = identityApi.GetEndpoint(launchProfileName);
 
  var basketApi = builder.AddProject<Projects.SmartDiscount_Basket_API>("basket-api")
@@ -58,7 +57,6 @@ var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
     .WithReference(serviceBus).WaitFor(serviceBus)
     .WithEnvironment("Identity__Url", identityEndpoint);
 redis.WithParentRelationship(basketApi);
-
 
 
 
