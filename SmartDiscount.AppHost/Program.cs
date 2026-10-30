@@ -1,4 +1,5 @@
 using SmartDiscount.AppHost;
+using Microsoft.Extensions.Hosting;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -123,7 +124,9 @@ var webApp = builder.AddProject<Projects.SmartDiscount_WebApp>("webapp", launchP
     .WithEnvironment("IdentityUrl", identityEndpoint);
 
 
-bool useOpenAI = true;
+// bool useOpenAI = true;
+bool useOpenAI = !builder.Environment.IsDevelopment();
+
 if (useOpenAI)
 {
   builder.AddOpenAI(catalogApi, webApp, OpenAITarget.OpenAI); // set to AzureOpenAI if you want to use Azure Ope

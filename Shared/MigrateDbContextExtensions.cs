@@ -65,6 +65,15 @@ internal static class MigrateDbContextExtensions
             await context.Database.MigrateAsync();
             await seeder(context, services);
         }
+
+
+        catch (Npgsql.PostgresException ex) when (ex.SqlState == "42PO4")
+        {
+            // Base déjà existante — ignorer et continuer
+            activity?.SetStatus(ActivityStatusCode.Ok);
+            await seeder(context, services);
+        }
+
         catch (Exception ex)
         {
             activity?.SetExceptionTags(ex);
