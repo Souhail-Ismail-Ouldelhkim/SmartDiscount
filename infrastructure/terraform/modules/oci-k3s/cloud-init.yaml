@@ -1,0 +1,40 @@
+#cloud-config
+# Installation automatique de K3s au boot
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - wget
+  - git
+  - htop
+
+runcmd:
+  # Ouvrir les ports nécessaires dans iptables (K3s)
+  - iptables -I INPUT -p tcp --dport 6443 -j ACCEPT
+  - iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+  - iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+  - iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+  - netfilter-persistent save
+
+  # Installation K3s avec kubeconfig lisible par tous
+  - curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --write-kubeconfig-mode 644 --tls-san $(curl -s https://api.ipify.org)" sh -
+
+  # Attendre que K3s soit prêt
+  - sleep 30
+
+  # Installer Helm
+  - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+  - chmod 700 get_helm.sh
+  - ./get_helm.sh
+
+  # Copier le kubeconfig pour ubuntu user
+  - mkdir -p /home/ubuntu/.kube
+  - cp /etc/rancher/k3s/k3s.yaml /home/ubuntu/.kube/config
+  - chown -R ubuntu:ubuntu /home/ubuntu/.kube
+  - sed -i "s/127.0.0.1/$(curl -s https://api.ipify.org)/g" /home/ubuntu/.kube/config
+
+  # Marquer l'installation terminée
+  - touch /tmp/k3s-installed
+

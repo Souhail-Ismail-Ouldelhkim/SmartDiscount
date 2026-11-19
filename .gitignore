@@ -107,3 +107,32 @@ infra/
 SmartDiscount.AppHost/infra/
 next-steps.md
 .azure/
+# ===== DevOps : secrets et fichiers locaux =====
+**/terraform.tfvars
+**/*.auto.tfvars
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform/
+**/crash.log
+*.pem
+**/kubeconfig
+**/.env
+**/.env.*
+!**/.env.example
+**/.azure/
+.vscode/
+
+# ===== DevOps : secrets et fichiers locaux =====
+**/terraform.tfvars
+**/*.auto.tfvars
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform/
+**/crash.log
+*.pem
+**/kubeconfig
+**/.env
+**/.env.*
+!**/.env.example
+**/.azure/
+.vscode/
